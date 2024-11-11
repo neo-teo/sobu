@@ -15,7 +15,7 @@ const sketch = (p: P5) => {
     let dialog: Dialog;
     let moveskit: MoveSkit;
     let tutorial: Tutorial;
-    let isTutorialActive = false;
+    let isTutorialActive = true;
     let customFont: P5.Font;
 
     p.preload = () => {

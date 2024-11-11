@@ -2,18 +2,13 @@ import type p5 from "p5";
 
 export class Dialog {
     private readonly script: string[] = [
-        "287 Evergreen Ave, Bushwick NY\n\nJuly 1st 2024",
-        "I understand moving is a good time to reflect and all",
-        "but it is humbling to see the things you saw potential in and kept",
+        "287 Evergreen Ave, Bushwick NY\n\n\nJuly 1st 2024",
+        "It isn't easy to see the things you saw potential in and kept",
         "just to realize they are now taking up space.",
-        "...",
-        "There have been some good ones though.",
-        "Like when it poured on Wriston and we moved 7 people's stuff with 3 people,",
-        "or the day we moved out of 102 Governor in a socially isolated world,",
-        "or the day we moved to Bushwick and had our first visit to Dicayagua.",
-        "...",
-        "And today is the day we move out of Evergreen.",
-        "...",
+        "Moving isn't all bad though.",
+        "when it poured on Wriston and we moved 7 people with 3 people,",
+        "or when we moved out of 102 Governor in the A3,",
+        "or when we moved to Bushwick and had our first visit to Dicayagua.",
         "Anyway -- time to get these boxes to the bay so I can move on in life.",
     ];
 
@@ -27,7 +22,7 @@ export class Dialog {
     private currentText: string = '';
     private targetText: string = '';
     private currentIndex: number = 0;
-    private letterDelay: number = 5; // 0.2 seconds
+    private letterDelay: number = 1; // Much faster text speed (was 5)
     private lastLetterTime: number = 0;
 
     constructor(p: p5) {
@@ -47,7 +42,7 @@ export class Dialog {
     }
 
     update(): void {
-        const now = Date.now();
+        const now = this.p.millis();
 
         if (this.currentIndex < this.targetText.length &&
             now - this.lastLetterTime > this.letterDelay) {
@@ -65,13 +60,8 @@ export class Dialog {
                 this.currentScriptIndex++;
                 this.setText(this.script[this.currentScriptIndex]);
             }
-
-            if (!this.isWaitingForNext) {
-                this.letterDelay = 10;
-            }
             this.wasSpacePressed = true;
         } else {
-            this.letterDelay = 100;
             this.wasSpacePressed = false;
         }
     }
@@ -117,9 +107,9 @@ export class Dialog {
             this.p.text(currentLine, dialogX + padding, y + paddingY);
         }
 
-        if (this.isWaitingForNext && this.currentScriptIndex === 0) {
+        if (this.isWaitingForNext && this.currentScriptIndex < this.script.length - 1) {
             this.p.textSize(12);
-            this.p.text("space to continue", dialogX + padding, dialogY + boxHeight - paddingY);
+            this.p.text("→ space", dialogX + boxWidth - padding * 5, dialogY + boxHeight - paddingY);
         }
     }
 }

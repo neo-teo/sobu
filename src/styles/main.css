@@ -10,8 +10,69 @@ body {
 #sketch-container {
     width: 100%;
     height: 100vh;
+    position: relative;
+    z-index: 2;
+    animation: fadeIn 2s ease-in forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 #sketch-container canvas {
     display: block;
+}
+
+#p5_loading {
+    display: none !important;
+}
+
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    /* Canvas will cover this when it loads */
+}
+
+.loading-image {
+    width: 100px;
+    /* Adjust size as needed */
+    height: auto;
+    image-rendering: pixelated;
+    /* Keep pixel art sharp */
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.8);
+    }
+
+    50% {
+        transform: scale(1.0);
+    }
+
+    100% {
+        transform: scale(0.8);
+    }
+}
+
+.loading-text {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #000;
 }

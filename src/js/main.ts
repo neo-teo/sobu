@@ -36,7 +36,7 @@ const sketch = (p: P5) => {
         p.createCanvas(p.windowWidth, p.windowHeight);
 
         sprite = new Sprite(p);
-        evergreen = new Evergreen(p);
+        evergreen = new Evergreen(p, sprite);
         dialog = new Dialog(p);
         tutorial = new Tutorial(p);
         moveskit = new MoveSkit(p);
@@ -66,7 +66,6 @@ const sketch = (p: P5) => {
         evergreen.drawCargobay();
 
         sprite.handleInput();
-        sprite.draw();
 
         evergreen.update();
         evergreen.draw();

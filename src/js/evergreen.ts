@@ -4,6 +4,7 @@ import { Box } from "./box";
 import { Plant } from "./plant";
 import { CargoBay } from "./cargobay";
 import { Chest } from "./chest";
+import Sprite from "./sprite";
 
 export class Evergreen {
     walls: Wall[];
@@ -11,10 +12,12 @@ export class Evergreen {
     plants: Plant[];
     chest: Chest;
     cargobay: CargoBay;
+    sprite: Sprite;
     p: p5;
 
-    constructor(p: p5) {
+    constructor(p: p5, sprite: Sprite) {
         this.p = p;
+        this.sprite = sprite;
 
         this.walls = [
             new Wall(p, 0, 0, 20, p.windowHeight),
@@ -54,11 +57,17 @@ export class Evergreen {
     draw(): void {
         this.walls.forEach((w) => w.draw());
 
-        this.boxes.forEach((b) => b.draw());
-        this.chest.draw();
-        this.plants.forEach((p) => p.draw());
+        const liftables = [...this.boxes, ...this.plants, this.chest];
 
-        // if cargoBay.isOverloaded, show exit object which is glowing circle on top of tike lol 
+        liftables.forEach(obj => {
+            if (!obj.isLifted && !obj.vx && !obj.vy) obj.draw();
+        });
+
+        this.sprite.draw();
+
+        liftables.forEach(obj => {
+            if (obj.isLifted || obj.vx !== 0 || obj.vy !== 0) obj.draw();
+        });
     }
 
     update(): void {

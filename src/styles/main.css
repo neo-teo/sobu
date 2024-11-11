@@ -12,7 +12,7 @@ body {
     height: 100vh;
     position: relative;
     z-index: 2;
-    animation: fadeIn 2s ease-in forwards;
+    animation: fadeIn 1.5s ease-in forwards;
 }
 
 @keyframes fadeIn {

@@ -5,10 +5,11 @@ import { LiftableMixin, type Liftable, type InteractionArea } from "./liftable";
 export class Box extends Obstacle implements Liftable, InteractionArea {
     private static images: p5.Image[] = [];
     private liftableImpl: LiftableMixin;
-
     isLifted: boolean = false;
-
     img: p5.Image;
+
+    get vx(): number { return this.liftableImpl.vx; }
+    get vy(): number { return this.liftableImpl.vy; }
 
     constructor(p: p5, x: number, y: number, size: 'sm' | 'md' | 'lg') {
         super(p, x, y, 50, 50);
@@ -35,6 +36,15 @@ export class Box extends Obstacle implements Liftable, InteractionArea {
 
     setObstacles(obstacles: InteractionArea[]): void {
         this.liftableImpl.setObstacles(obstacles);
+    }
+
+    getCollisionBounds() {
+        return {
+            x: this.x + this.width / 6,
+            y: this.y + this.height / 6,
+            width: this.width / 2,
+            height: this.height / 2
+        };
     }
 
     getCollisionBoundsCenter(): { x: number, y: number } {

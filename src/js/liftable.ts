@@ -12,7 +12,9 @@ export interface InteractionArea {
 export interface Liftable {
     readonly x: number;
     readonly y: number;
-    readonly weight: number;  // Add this
+    readonly weight: number;
+    readonly vx: number;
+    readonly vy: number;
     isLifted: boolean;
     lift(): void;
     drop(direction: 'left' | 'right' | 'up' | 'down'): void;
@@ -34,8 +36,8 @@ export class LiftableMixin implements Liftable {
 
     private isMoving: boolean = false;
 
-    private vx: number = 0;
-    private vy: number = 0;
+    private _vx: number = 0;
+    private _vy: number = 0;
 
     private readonly FRICTION = 0.90;
     private readonly THROW_SPEED = 10;
@@ -95,36 +97,36 @@ export class LiftableMixin implements Liftable {
 
     update() {
         if (this.isMoving && !this.isLifted) {
-            if (this.vy < 0) {
-                this.vy += this.GRAVITY;
+            if (this._vy < 0) {
+                this._vy += this.GRAVITY;
             }
 
             // Calculate new position
-            const newX = this._x + this.vx;
-            const newY = this._y + this.vy;
+            const newX = this._x + this._vx;
+            const newY = this._y + this._vy;
 
             // Check for collisions and handle bouncing
             const BOUNCE_FACTOR = 0.1; // Reduce velocity by 50% on bounce
 
             if (this.isColliding(newX, this._y)) {
-                this.vx = -this.vx * BOUNCE_FACTOR; // Reverse and reduce horizontal velocity
+                this._vx = -this._vx * BOUNCE_FACTOR; // Reverse and reduce horizontal velocity
             } else {
                 this._x = newX;
             }
             if (this.isColliding(this._x, newY)) {
-                this.vy = -this.vy * BOUNCE_FACTOR; // Reverse and reduce vertical velocity
+                this._vy = -this._vy * BOUNCE_FACTOR; // Reverse and reduce vertical velocity
             } else {
                 this._y = newY;
             }
 
             // Apply friction
-            this.vx *= this.FRICTION;
-            this.vy *= this.FRICTION;
+            this._vx *= this.FRICTION;
+            this._vy *= this.FRICTION;
 
             // Stop if moving very slowly
-            if (Math.abs(this.vx) < 0.1 && Math.abs(this.vy) < 0.1) {
-                this.vx = 0;
-                this.vy = 0;
+            if (Math.abs(this._vx) < 0.1 && Math.abs(this._vy) < 0.1) {
+                this._vx = 0;
+                this._vy = 0;
                 this.isMoving = false;
             }
         }
@@ -134,35 +136,34 @@ export class LiftableMixin implements Liftable {
         this.isLifted = false;
         this.isMoving = true;
 
-        console.log('liftableimpl :', direction);
-
-        // Set initial velocity based on throw direction
         switch (direction) {
             case 'left':
-                this.vx = -this.THROW_SPEED;
-                this.vy = -this.THROW_ARC;
+                this._vx = -this.THROW_SPEED;
+                this._vy = -this.THROW_ARC;
                 break;
             case 'right':
-                this.vx = this.THROW_SPEED;
-                this.vy = -this.THROW_ARC;
+                this._vx = this.THROW_SPEED;
+                this._vy = -this.THROW_ARC;
                 break;
             case 'up':
-                this.vy = -this.THROW_SPEED * 1.7;
+                this._vy = -this.THROW_SPEED * 1.7;
                 break;
             case 'down':
-                this.vy = this.THROW_SPEED;
+                this._vy = this.THROW_SPEED;
                 break;
         }
     }
 
     get x(): number { return this._x; }
     get y(): number { return this._y; }
+    get vx(): number { return this._vx; }
+    get vy(): number { return this._vy; }
 
     lift(): void {
         this.isLifted = true;
         this.isMoving = false;
-        this.vx = 0;
-        this.vy = 0;
+        this._vx = 0;
+        this._vy = 0;
     }
 
     followSprite(spriteX: number, spriteY: number): void {

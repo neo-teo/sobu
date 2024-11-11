@@ -7,6 +7,9 @@ export class Chest extends Obstacle implements Liftable, InteractionArea {
     private liftableImpl: LiftableMixin;
     isLifted: boolean = false;
 
+    get vx(): number { return this.liftableImpl.vx; }
+    get vy(): number { return this.liftableImpl.vy; }
+
     constructor(p: p5, x: number, y: number) {
         super(p, x, y, 50, 50);
         this.weight = 40.5;
@@ -50,7 +53,7 @@ export class Chest extends Obstacle implements Liftable, InteractionArea {
             x: this.x + this.width / 4,
             y: this.y + this.height / 4,
             width: this.width / 2,
-            height: this.height / 2
+            height: this.height / 1.5
         };
     }
 

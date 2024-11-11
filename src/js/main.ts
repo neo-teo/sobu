@@ -68,8 +68,7 @@ const sketch = (p: P5) => {
         sprite.handleInput();
         sprite.draw();
 
-        evergreen.boxes.forEach((box) => box.update());
-        evergreen.plants.forEach((plant) => plant.update());
+        evergreen.update();
         evergreen.draw();
 
         if (isTutorialActive) {

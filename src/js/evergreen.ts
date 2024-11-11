@@ -40,7 +40,11 @@ export class Evergreen {
         this.plants.push(new Plant(p, p.width / 2 - 40, p.height / 2 - 200, 'snake'));
         this.plants.push(new Plant(p, p.width / 2 - 300, p.height / 2 - 280, 'bird'));
 
-        this.cargobay = new CargoBay(p, [...this.boxes, ...this.plants])
+        this.cargobay = new CargoBay(p, [
+            ...this.boxes,
+            ...this.plants,
+            this.chest
+        ]);
     }
 
     drawCargobay(): void {
@@ -55,5 +59,11 @@ export class Evergreen {
         this.plants.forEach((p) => p.draw());
 
         // if cargoBay.isOverloaded, show exit object which is glowing circle on top of tike lol 
+    }
+
+    update(): void {
+        this.boxes.forEach((box) => box.update());
+        this.plants.forEach((plant) => plant.update());
+        this.chest.update();
     }
 }

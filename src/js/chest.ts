@@ -15,7 +15,6 @@ export class Chest extends Obstacle implements Liftable, InteractionArea {
         this.liftableImpl = new LiftableMixin(p, x, y, this);
     }
 
-    // Required Liftable interface methods
     lift(): void {
         this.liftableImpl.lift();
         this.isLifted = this.liftableImpl.isLifted;
@@ -28,7 +27,6 @@ export class Chest extends Obstacle implements Liftable, InteractionArea {
     }
 
     drop(direction: 'left' | 'right' | 'up' | 'down'): void {
-        console.log('Chest drop called with direction:', direction);
         this.liftableImpl.drop(direction);
         this.isLifted = this.liftableImpl.isLifted;
     }
@@ -49,10 +47,10 @@ export class Chest extends Obstacle implements Liftable, InteractionArea {
 
     getCollisionBounds() {
         return {
-            x: this.x,
-            y: this.y,
-            width: this.width,
-            height: this.height
+            x: this.x + this.width / 4,
+            y: this.y + this.height / 4,
+            width: this.width / 2,
+            height: this.height / 2
         };
     }
 

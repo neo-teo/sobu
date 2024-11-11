@@ -39,8 +39,8 @@ export class LiftableMixin implements Liftable {
 
     private readonly FRICTION = 0.90;
     private readonly THROW_SPEED = 10;
-    private readonly GRAVITY = 1;
     private readonly THROW_ARC = 5;
+    private readonly GRAVITY = 1;
 
     private interactionArea: InteractionArea;
     private obstacles: InteractionArea[] = []; // Add this property
@@ -104,7 +104,7 @@ export class LiftableMixin implements Liftable {
             const newY = this._y + this.vy;
 
             // Check for collisions and handle bouncing
-            const BOUNCE_FACTOR = 0.5; // Reduce velocity by 50% on bounce
+            const BOUNCE_FACTOR = 0.1; // Reduce velocity by 50% on bounce
 
             if (this.isColliding(newX, this._y)) {
                 this.vx = -this.vx * BOUNCE_FACTOR; // Reverse and reduce horizontal velocity
@@ -133,6 +133,8 @@ export class LiftableMixin implements Liftable {
     drop(direction: 'left' | 'right' | 'up' | 'down'): void {
         this.isLifted = false;
         this.isMoving = true;
+
+        console.log('liftableimpl :', direction);
 
         // Set initial velocity based on throw direction
         switch (direction) {

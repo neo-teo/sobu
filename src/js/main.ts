@@ -8,6 +8,7 @@ import { MoveSkit } from './moveskit';
 import { Wall } from './wall';
 import { CargoBay } from './cargobay';
 import Sprite from './sprite';
+import { Chest } from './chest';
 
 const sketch = (p: P5) => {
     let sprite: Sprite;
@@ -25,6 +26,7 @@ const sketch = (p: P5) => {
         Plant.loadImages(p);
         MoveSkit.loadImages(p);
         CargoBay.loadImages(p);
+        Chest.loadImage(p)
 
         customFont = p.loadFont('/sobu/pay2win.ttf');
     };
@@ -39,14 +41,15 @@ const sketch = (p: P5) => {
         tutorial = new Tutorial(p);
         moveskit = new MoveSkit(p);
 
-        let obstacles = [...evergreen.walls, ...evergreen.boxes, ...evergreen.plants];
-        let liftables = [...evergreen.boxes, ...evergreen.plants];
+        let obstacles = [...evergreen.walls, ...evergreen.boxes, ...evergreen.plants, evergreen.chest];
+        let liftables = [...evergreen.boxes, ...evergreen.plants, evergreen.chest];
 
         sprite.setObstacles(obstacles);
         sprite.setLiftableObjects(liftables);
 
         evergreen.boxes.forEach((box) => box.setObstacles(obstacles));
         evergreen.plants.forEach((plant) => plant.setObstacles(obstacles));
+        evergreen.chest.setObstacles(obstacles);
     };
 
     p.draw = () => {

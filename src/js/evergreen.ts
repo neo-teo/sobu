@@ -3,11 +3,13 @@ import { Wall } from "./wall";
 import { Box } from "./box";
 import { Plant } from "./plant";
 import { CargoBay } from "./cargobay";
+import { Chest } from "./chest";
 
 export class Evergreen {
     walls: Wall[];
     boxes: Box[];
     plants: Plant[];
+    chest: Chest;
     cargobay: CargoBay;
     p: p5;
 
@@ -32,7 +34,8 @@ export class Evergreen {
 
         this.boxes.push(new Box(p, p.width / 2 + 50, p.height / 2 + 175, 'sm'));
 
-        this.boxes.push(new Box(p, p.width / 2 - 200, p.height / 2 - 210, 'chest'));
+        this.chest = new Chest(p, p.width / 2 - 200, p.height / 2 - 210);
+
         this.plants = [];
         this.plants.push(new Plant(p, p.width / 2 - 40, p.height / 2 - 200, 'snake'));
         this.plants.push(new Plant(p, p.width / 2 - 300, p.height / 2 - 280, 'bird'));
@@ -48,9 +51,9 @@ export class Evergreen {
         this.walls.forEach((w) => w.draw());
 
         this.boxes.forEach((b) => b.draw());
+        this.chest.draw();
         this.plants.forEach((p) => p.draw());
 
-
-        // if cargoBay.isOverloaded, show exit object
+        // if cargoBay.isOverloaded, show exit object which is glowing circle on top of tike lol 
     }
 }

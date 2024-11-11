@@ -10,7 +10,7 @@ export class Box extends Obstacle implements Liftable, InteractionArea {
 
     img: p5.Image;
 
-    constructor(p: p5, x: number, y: number, size: 'sm' | 'md' | 'lg' | 'chest') {
+    constructor(p: p5, x: number, y: number, size: 'sm' | 'md' | 'lg') {
         super(p, x, y, 50, 50);
 
         switch (size) {
@@ -25,10 +25,6 @@ export class Box extends Obstacle implements Liftable, InteractionArea {
             case 'lg':
                 this.img = Box.images[2];
                 this.weight = 8.5;
-                break;
-            case 'chest':
-                this.img = Box.images[3];
-                this.weight = 40.5;
                 break;
         }
         this.width = this.img.width;
@@ -78,7 +74,6 @@ export class Box extends Obstacle implements Liftable, InteractionArea {
             p.loadImage('/sobu/boxes/small.png'),
             p.loadImage('/sobu/boxes/medium.png'),
             p.loadImage('/sobu/boxes/large.png'),
-            p.loadImage('/sobu/chest.png'),
         ];
     }
 

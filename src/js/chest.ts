@@ -2,36 +2,20 @@ import type p5 from "p5";
 import { Obstacle } from "./obstacle";
 import { LiftableMixin, type Liftable, type InteractionArea } from "./liftable";
 
-export class Plant extends Obstacle implements Liftable, InteractionArea {
-    private static images: p5.Image[] = [];
+export class Chest extends Obstacle implements Liftable, InteractionArea {
+    private static image: p5.Image;
     private liftableImpl: LiftableMixin;
     isLifted: boolean = false;
-    img: p5.Image;
 
-    private readonly potWidth = 45;
-    private readonly potHeight = 30;
-
-    constructor(p: p5, x: number, y: number, type: 'snake' | 'bird') {
+    constructor(p: p5, x: number, y: number) {
         super(p, x, y, 50, 50);
-
-        switch (type) {
-            case 'bird':
-                this.img = Plant.images[0];
-                this.weight = 4.8;
-                break;
-            case 'snake':
-                this.img = Plant.images[1];
-                this.weight = 2.3;
-                break;
-        }
-
-        // this.img = Plant.plantImg;
-        this.width = this.img.width;
-        this.height = this.img.height;
-
+        this.weight = 40.5;
+        this.width = Chest.image.width;
+        this.height = Chest.image.height;
         this.liftableImpl = new LiftableMixin(p, x, y, this);
     }
 
+    // Required Liftable interface methods
     lift(): void {
         this.liftableImpl.lift();
         this.isLifted = this.liftableImpl.isLifted;
@@ -44,6 +28,7 @@ export class Plant extends Obstacle implements Liftable, InteractionArea {
     }
 
     drop(direction: 'left' | 'right' | 'up' | 'down'): void {
+        console.log('Chest drop called with direction:', direction);
         this.liftableImpl.drop(direction);
         this.isLifted = this.liftableImpl.isLifted;
     }
@@ -64,10 +49,10 @@ export class Plant extends Obstacle implements Liftable, InteractionArea {
 
     getCollisionBounds() {
         return {
-            x: this.x + (this.width - this.potWidth) / 2,
-            y: this.y + this.height - this.potHeight,
-            width: this.potWidth,
-            height: this.potHeight
+            x: this.x,
+            y: this.y,
+            width: this.width,
+            height: this.height
         };
     }
 
@@ -75,15 +60,11 @@ export class Plant extends Obstacle implements Liftable, InteractionArea {
         return this.liftableImpl.getCollisionBoundsCenter();
     }
 
-    static loadImages(p: p5): void {
-        // this.plantImg = p.loadImage('/sobu/plants/bird.png');
-        this.images = [
-            p.loadImage('/sobu/plants/bird.png'),
-            p.loadImage('/sobu/plants/snake.png'),
-        ];
+    static loadImage(p: p5): void {
+        this.image = p.loadImage('/sobu/chest.png');
     }
 
     draw(): void {
-        this.p.image(this.img, this.x, this.y);
+        this.p.image(Chest.image, this.x, this.y);
     }
-}
+} 

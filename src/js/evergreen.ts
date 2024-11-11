@@ -57,7 +57,7 @@ export class Evergreen {
     draw(): void {
         this.walls.forEach((w) => w.draw());
 
-        const liftables = [...this.boxes, ...this.plants, this.chest];
+        const liftables = [...this.boxes, this.chest, ...this.plants];
 
         liftables.forEach(obj => {
             if (!obj.isLifted && !obj.vx && !obj.vy) obj.draw();
@@ -72,7 +72,35 @@ export class Evergreen {
 
     update(): void {
         this.boxes.forEach((box) => box.update());
-        this.plants.forEach((plant) => plant.update());
         this.chest.update();
+        this.plants.forEach((plant) => plant.update());
+    }
+
+    setupObstacles(): void {
+        const obstacles = [...this.walls, ...this.boxes, ...this.plants, this.chest];
+        const liftables = [...this.boxes, ...this.plants, this.chest];
+
+        this.sprite.setObstacles(obstacles);
+        this.sprite.setLiftableObjects(liftables);
+
+        this.boxes.forEach((box) => box.setObstacles(obstacles));
+        this.plants.forEach((plant) => plant.setObstacles(obstacles));
+        this.chest.setObstacles(obstacles);
+    }
+
+    private updateWalls(): void {
+        this.walls = [
+            new Wall(this.p, 0, 0, 20, this.p.windowHeight),
+            new Wall(this.p, this.p.windowWidth - 20, 0, 20, this.p.windowHeight / 2 - 100),
+            new Wall(this.p, this.p.windowWidth + 20, this.p.windowHeight / 2 - 100, 20, 200),
+            new Wall(this.p, this.p.windowWidth - 20, this.p.windowHeight / 2 + 100, 20, this.p.windowHeight / 2),
+            new Wall(this.p, 0, 0, this.p.windowWidth, 20),
+            new Wall(this.p, 0, this.p.windowHeight - 20, this.p.windowWidth, 20),
+        ];
+    }
+
+    public resize(): void {
+        this.updateWalls();
+        this.setupObstacles();
     }
 }

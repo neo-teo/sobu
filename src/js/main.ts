@@ -2,8 +2,7 @@ import P5 from 'p5';
 import { Evergreen } from './evergreen';
 import { Box } from './box';
 import { Plant } from './plant';
-import { Dialog } from './dialog';
-import { Tutorial } from './tutorial';
+import { DialogManager } from './dialogmanager';
 import { MoveSkit } from './moveskit';
 import { Wall } from './wall';
 import { CargoBay } from './cargobay';
@@ -13,10 +12,8 @@ import { Chest } from './chest';
 const sketch = (p: P5) => {
     let sprite: Sprite;
     let evergreen: Evergreen;
-    let dialog: Dialog;
+    let dialogManager: DialogManager;
     let moveskit: MoveSkit;
-    let tutorial: Tutorial;
-    let isTutorialActive = true;
     let customFont: P5.Font;
 
     p.preload = () => {
@@ -37,19 +34,10 @@ const sketch = (p: P5) => {
 
         sprite = new Sprite(p);
         evergreen = new Evergreen(p, sprite);
-        dialog = new Dialog(p);
-        tutorial = new Tutorial(p);
+        dialogManager = new DialogManager(p);
         moveskit = new MoveSkit(p);
 
-        let obstacles = [...evergreen.walls, ...evergreen.boxes, ...evergreen.plants, evergreen.chest];
-        let liftables = [...evergreen.boxes, ...evergreen.plants, evergreen.chest];
-
-        sprite.setObstacles(obstacles);
-        sprite.setLiftableObjects(liftables);
-
-        evergreen.boxes.forEach((box) => box.setObstacles(obstacles));
-        evergreen.plants.forEach((plant) => plant.setObstacles(obstacles));
-        evergreen.chest.setObstacles(obstacles);
+        evergreen.setupObstacles();
     };
 
     p.draw = () => {
@@ -58,31 +46,17 @@ const sketch = (p: P5) => {
             return;
         }
 
-        // moveskit.draw();
-        // return;
-
         p.background(255);
-
-        evergreen.drawCargobay();
 
         sprite.handleInput();
 
         evergreen.update();
+
+        evergreen.drawCargobay();
         evergreen.draw();
 
-        if (isTutorialActive) {
-            tutorial.update(sprite);
-            tutorial.draw();
-
-            if (tutorial.isComplete()) {
-                isTutorialActive = false;
-                dialog.start();
-            }
-        } else {
-            dialog.handleInput();
-            dialog.update();
-            dialog.draw();
-        }
+        dialogManager.update(sprite);
+        dialogManager.draw();
     };
 
     function smallDeviceMessage(): void {
@@ -94,6 +68,11 @@ const sketch = (p: P5) => {
         p.text('Sobu is meant to be \nplayed on large devices.', p.width / 2, p.height / 2);
         p.pop();
     }
+
+    p.windowResized = () => {
+        p.resizeCanvas(p.windowWidth, p.windowHeight);
+        evergreen.resize();
+    };
 };
 
 new P5(sketch, document.getElementById('sketch-container') || undefined);

@@ -11,10 +11,10 @@ export class Tike implements Liftable, InteractionArea {
 
     readonly weight: number = 0;
 
-    private isTransitioning: boolean = false;
+    private _isTransitioning: boolean = false;
     private transitionX: number = 0;
     private readonly TRANSITION_SPEED = 0.2;
-    private readonly TRANSITION_DISTANCE = 50;
+    private readonly TRANSITION_DISTANCE = 200;
     private startX: number = 0;
 
     private carJitters = [-1, 1, 1, -1, -1, 1, 2, 0, -2];
@@ -25,20 +25,10 @@ export class Tike implements Liftable, InteractionArea {
         this._x = x;
         this._y = y;
 
-        // Create a proper InteractionArea implementation
-        const interactionArea: InteractionArea = {
-            getCollisionBounds: () => ({
-                x: this._x,
-                y: this._y,
-                width: MoveSkit.carImg?.width || 0,
-                height: MoveSkit.carImg?.height || 0
-            })
-        };
-
-        this.liftableImpl = new LiftableMixin(p, x, y, interactionArea);
+        this.liftableImpl = new LiftableMixin(p, x, y, this);
     }
 
-    get x(): number { return this.isTransitioning ? this.transitionX : this.liftableImpl.x; }
+    get x(): number { return this._isTransitioning ? this.transitionX : this.liftableImpl.x; }
     get y(): number { return this.liftableImpl.y; }
     get vx(): number { return this.liftableImpl.vx; }
     get vy(): number { return this.liftableImpl.vy; }
@@ -46,7 +36,7 @@ export class Tike implements Liftable, InteractionArea {
     lift(): void {
         if (this.isLifted) return;
         this.isLifted = true;
-        this.isTransitioning = true;
+        this._isTransitioning = true;
         this.startX = this.liftableImpl.x;
         this.transitionX = this.startX;
     }
@@ -59,7 +49,7 @@ export class Tike implements Liftable, InteractionArea {
         // Car doesn't follow sprite
     }
 
-    isNearby(spriteX: number, spriteY: number, threshold: number = 100): boolean {
+    isNearby(spriteX: number, spriteY: number, threshold: number = 70): boolean {
         return this.liftableImpl.isNearby(spriteX, spriteY, threshold);
     }
 
@@ -81,7 +71,7 @@ export class Tike implements Liftable, InteractionArea {
     }
 
     update(): void {
-        if (this.isTransitioning) {
+        if (this._isTransitioning) {
             if (this.transitionX < this.startX + this.TRANSITION_DISTANCE) {
                 this.transitionX += this.TRANSITION_SPEED;
             }
@@ -91,7 +81,8 @@ export class Tike implements Liftable, InteractionArea {
     }
 
     get weMovedOut(): boolean {
-        return this.isTransitioning && this.x >= this.startX + this.TRANSITION_DISTANCE;
+        return false;
+        return this._isTransitioning && this.x >= this.startX + this.TRANSITION_DISTANCE;
     }
 
     draw(ignited: boolean): void {
@@ -105,7 +96,7 @@ export class Tike implements Liftable, InteractionArea {
         if (ignited) {
             this.jitterI++;
             if (this.jitterI >= this.carJitters.length) this.jitterI = 0;
-            yOffset = this.isTransitioning
+            yOffset = this._isTransitioning
                 ? this.carJitters[this.jitterI] / 2
                 : this.carJitters[this.jitterI];
         }
@@ -119,5 +110,9 @@ export class Tike implements Liftable, InteractionArea {
         );
 
         this.p.pop();
+    }
+
+    get isTransitioning(): boolean {
+        return this._isTransitioning;
     }
 }

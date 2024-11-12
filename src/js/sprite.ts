@@ -2,6 +2,7 @@ import p5 from 'p5'; // Import the p5 library
 
 import { Obstacle } from './obstacle';
 import type { Liftable } from './liftable';
+import { Tike } from './tike';
 
 export default class Sprite {
     private static images: { [key: string]: p5.Image } = {};
@@ -25,8 +26,11 @@ export default class Sprite {
 
     private lastDirection: 'left' | 'right' | 'up' | 'down' = 'down';
 
-    constructor(p: p5) {
+    private tike: Tike;  // Add reference to Tike
+
+    constructor(p: p5, tike: Tike) {  // Add tike parameter
         this.p = p;
+        this.tike = tike;
         this.x = p.width / 2 - 100;
         this.y = p.height / 2 + 150;
         this.vx = 0;
@@ -76,6 +80,14 @@ export default class Sprite {
     }
 
     handleInput(): void {
+        // If Tike is transitioning, force sprite to move right and disable controls
+        if (this.tike.isTransitioning) {
+            this.img = Sprite.images.standingRight;
+            this.x = this.tike.x + Sprite.images.standingRight.width; // Follow behind Tike
+            this.y = this.tike.y - Sprite.images.standingRight.height / 2; // Follow behind Tike
+            return;
+        }
+
         // Guard against unloaded images
         if (!Sprite.images || !this.img) return;
 

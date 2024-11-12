@@ -17,9 +17,10 @@ export class Evergreen {
     p: p5;
     tike: Tike;
 
-    constructor(p: p5, sprite: Sprite) {
+    constructor(p: p5) {
         this.p = p;
-        this.sprite = sprite;
+        this.tike = new Tike(p, p.width - 150, p.height / 2);
+        this.sprite = new Sprite(p, this.tike);
 
         this.walls = this.createWalls();
 
@@ -43,8 +44,6 @@ export class Evergreen {
             ...this.plants,
             this.chest
         ]);
-
-        this.tike = new Tike(p, p.width - 150, p.height / 2);
     }
 
     drawCargobay(): void {

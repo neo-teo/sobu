@@ -10,7 +10,6 @@ import Sprite from './sprite';
 import { Chest } from './chest';
 
 const sketch = (p: P5) => {
-    let sprite: Sprite;
     let evergreen: Evergreen;
     let dialogManager: DialogManager;
     let moveskit: MoveSkit;
@@ -32,8 +31,7 @@ const sketch = (p: P5) => {
         p.textFont(customFont);
         p.createCanvas(p.windowWidth, p.windowHeight);
 
-        sprite = new Sprite(p);
-        evergreen = new Evergreen(p, sprite);
+        evergreen = new Evergreen(p);
         dialogManager = new DialogManager(p);
         moveskit = new MoveSkit(p);
 
@@ -53,14 +51,14 @@ const sketch = (p: P5) => {
             return;
         }
 
-        sprite.handleInput();
+        evergreen.sprite.handleInput();
 
         evergreen.update();
 
         evergreen.drawCargobay();
         evergreen.draw();
 
-        dialogManager.update(sprite);
+        dialogManager.update(evergreen.sprite);
         dialogManager.draw();
     };
 

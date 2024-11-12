@@ -1,4 +1,5 @@
 import type p5 from "p5";
+import Sprite from "./sprite";
 
 export class MoveSkit {
     private static backgroundImg: p5.Image | null = null;
@@ -21,7 +22,7 @@ export class MoveSkit {
     }
 
     draw(): void {
-        if (!MoveSkit.backgroundImg || !MoveSkit.carImg) return;
+        if (!MoveSkit.backgroundImg || !MoveSkit.carImg || !Sprite.images.standingRight) return;
 
         let { displayWidth, displayHeight } = this.getBackgroundDim();
 
@@ -38,6 +39,13 @@ export class MoveSkit {
         this.p.image(MoveSkit.backgroundImg, this.p.width / 2, this.p.height / 2, displayWidth, displayHeight);
         this.p.imageMode(this.p.CORNER);
         this.p.noSmooth();
+        this.p.image(
+            Sprite.images.standingRight,
+            this.p.width / 2 - Sprite.images.standingRight.width - 20,
+            this.p.height - Sprite.images.standingRight.height * 3 + this.currentBounceOffset,
+            Sprite.images.standingRight.width * 2,
+            Sprite.images.standingRight.height * 2
+        );
         this.p.image(
             MoveSkit.carImg,
             this.p.width / 2 - MoveSkit.carImg.width * 3 / 2,

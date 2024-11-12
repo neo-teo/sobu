@@ -5,7 +5,7 @@ import type { Liftable } from './liftable';
 import { Tike } from './tike';
 
 export default class Sprite {
-    private static images: { [key: string]: p5.Image } = {};
+    static images: { [key: string]: p5.Image } = {};
     private static imagesLoaded: boolean = false;
 
     private p: p5;  // Store the p5 instance
@@ -42,7 +42,6 @@ export default class Sprite {
     }
 
     static loadImages(p: p5): void {
-        this.images.resting = p.loadImage('/sobu/sprite/rest.gif');
         this.images.walkingUp = p.loadImage('/sobu/sprite/up.gif');
         this.images.walkingDown = p.loadImage('/sobu/sprite/down.gif');
         this.images.walkingLeft = p.loadImage('/sobu/sprite/left.gif');
@@ -219,7 +218,7 @@ export default class Sprite {
         if (this.img) {
             this.p.image(this.img, this.x, this.y, this.img.width * 0.8, this.img.height * 0.8);
         } else if (Sprite.imagesLoaded) {
-            this.img = Sprite.images.resting;
+            this.img = Sprite.images.standingDown;
         }
 
         if (this.liftedObject) {

@@ -1,6 +1,7 @@
 import type p5 from "p5";
 import type { Liftable } from "./liftable";
 import { MoveSkit } from "./moveskit";
+import { Tike } from "./tike";
 
 export class CargoBay {
     private p: p5;  // Store the p5 instance
@@ -8,9 +9,10 @@ export class CargoBay {
     private static images: p5.Image[] = [];
 
     private liftables: Liftable[] = [];
+    private tike: Tike;
 
-    private readonly bayWidth = 300;
-    private readonly bayHeight = 200;
+    private readonly bayWidth = 250;
+    private readonly bayHeight = 400;
 
     private displayWeight: number = 0;
     private targetWeight: number = 0;
@@ -25,6 +27,8 @@ export class CargoBay {
         this.p = p;
 
         this.liftables = liftables;
+
+        this.tike = new Tike(p, liftables);
 
         this.targetWeight = this.calculateTotalWeight();
         this.displayWeight = this.targetWeight;
@@ -96,16 +100,10 @@ export class CargoBay {
         };
     }
 
-    isOverloaded(): boolean {
-        return this.whatIsWeight() > 100;
-    }
-
     draw(): void {
-        if (!CargoBay.images[0] || !CargoBay.images[1] || !MoveSkit.carImg) return;
+        if (!CargoBay.images[0] || !CargoBay.images[1] || !CargoBay.images[2] || !MoveSkit.carImg) return;
 
-        const weight = this.whatIsWeight();
-
-        let rectW = 20;
+        let rectW = 10;
 
         let yoff = this.bayHeight + rectW;
         let xoff = this.bayWidth + rectW;
@@ -115,31 +113,35 @@ export class CargoBay {
 
         this.p.push();
         this.p.translate(middleX, middleY);
-
-        this.p.fill(50, 50, 50);
-        this.p.rectMode(this.p.CENTER);
-        this.p.noStroke();
-        this.p.rect(0, -yoff / 2 - 25, this.bayWidth / 2, 50);
-
-        // if its overweight make text red... 
-        if (weight > 100) {
-            this.p.fill(255, 0, 0);
-        } else {
-            this.p.fill('white');
-        }
-        this.p.textAlign(this.p.CENTER, this.p.CENTER);
-        this.p.textSize(18);
-        this.p.text(weight.toFixed(1) + " kg", 0, -yoff / 2 - 25);
-
-        this.p.noSmooth();
-
         this.p.imageMode(this.p.CENTER);
 
+        const weight = this.whatIsWeight();
+        this.p.noSmooth();
+
+        // walls
         this.p.image(CargoBay.images[0], 0, -yoff / 2, this.bayWidth, rectW);
         this.p.image(CargoBay.images[0], 0, +yoff / 2, this.bayWidth, rectW);
         this.p.image(CargoBay.images[1], -xoff / 2, 0, rectW, this.bayHeight);
 
-        this.p.image(MoveSkit.carImg, this.bayWidth / 2, 0, MoveSkit.carImg.width * 1.5, MoveSkit.carImg.height * 1.5);
+        // computer
+        this.p.image(CargoBay.images[2], 20, -this.bayHeight / 1.65);
+
+        this.p.fill(74, 246, 38);
+        if (weight > 100) {
+            this.p.fill('red');
+        }
+        this.p.textAlign(this.p.CENTER, this.p.CENTER);
+        this.p.textSize(10);
+        this.p.text(
+            weight === 0
+                ? '--'
+                : weight > 100
+                    ? weight.toFixed(0)
+                    : weight.toFixed(1)
+            , CargoBay.images[2].width / 2.55, -this.bayHeight / 1.58);
+
+
+        this.tike.draw(weight > 50 && weight < 100);
 
         this.p.pop();
     }
@@ -148,6 +150,7 @@ export class CargoBay {
         this.images = [
             p.loadImage('/sobu/cargobay/horizontal.png'),
             p.loadImage('/sobu/cargobay/vertical.png'),
+            p.loadImage('/sobu/cargobay/display.png')
         ];
     }
 }

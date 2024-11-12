@@ -19,14 +19,7 @@ export class Evergreen {
         this.p = p;
         this.sprite = sprite;
 
-        this.walls = [
-            new Wall(p, 0, 0, 20, p.windowHeight),
-            new Wall(p, p.windowWidth - 20, 0, 20, p.windowHeight / 2 - 100),
-            new Wall(p, p.windowWidth + 20, p.windowHeight / 2 - 100, 20, 200),
-            new Wall(p, p.windowWidth - 20, p.windowHeight / 2 + 100, 20, p.windowHeight / 2),
-            new Wall(p, 0, 0, p.windowWidth, 20),
-            new Wall(p, 0, p.windowHeight - 20, p.windowWidth, 20),
-        ];
+        this.walls = this.createWalls();
 
         this.boxes = [];
         this.boxes.push(new Box(p, p.width / 2 + 40, p.height / 2 - 170, 'md'));
@@ -51,11 +44,12 @@ export class Evergreen {
     }
 
     drawCargobay(): void {
+        this.walls.forEach((w) => w.draw());
+
         this.cargobay.draw();
     }
 
     draw(): void {
-        this.walls.forEach((w) => w.draw());
 
         const liftables = [...this.boxes, this.chest, ...this.plants];
 
@@ -88,15 +82,21 @@ export class Evergreen {
         this.chest.setObstacles(obstacles);
     }
 
-    private updateWalls(): void {
-        this.walls = [
+    private createWalls(): Wall[] {
+        return [
+            // vertical walls
             new Wall(this.p, 0, 0, 20, this.p.windowHeight),
-            new Wall(this.p, this.p.windowWidth - 20, 0, 20, this.p.windowHeight / 2 - 100),
-            new Wall(this.p, this.p.windowWidth + 20, this.p.windowHeight / 2 - 100, 20, 200),
-            new Wall(this.p, this.p.windowWidth - 20, this.p.windowHeight / 2 + 100, 20, this.p.windowHeight / 2),
+            new Wall(this.p, this.p.windowWidth - 20, 0, 20, this.p.windowHeight / 2 - 200),
+            new Wall(this.p, this.p.windowWidth + 20, this.p.windowHeight / 2 - 200, 20, 400),
+            new Wall(this.p, this.p.windowWidth - 20, this.p.windowHeight / 2 + 200, 20, this.p.windowHeight / 2),
+            // horizontal walls
             new Wall(this.p, 0, 0, this.p.windowWidth, 20),
             new Wall(this.p, 0, this.p.windowHeight - 20, this.p.windowWidth, 20),
         ];
+    }
+
+    private updateWalls(): void {
+        this.walls = this.createWalls();
     }
 
     public resize(): void {

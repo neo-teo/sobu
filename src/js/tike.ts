@@ -14,7 +14,7 @@ export class Tike implements Liftable, InteractionArea {
     private _isTransitioning: boolean = false;
     private transitionX: number = 0;
     private readonly TRANSITION_SPEED = 0.2;
-    private readonly TRANSITION_DISTANCE = 200;
+    private readonly TRANSITION_DISTANCE = 100;
     private startX: number = 0;
 
     private carJitters = [-1, 1, 1, -1, -1, 1, 2, 0, -2];
@@ -54,11 +54,13 @@ export class Tike implements Liftable, InteractionArea {
     }
 
     getCollisionBounds() {
+        const imageWidth = MoveSkit.carImg?.width || 0;
+        const imageHeight = MoveSkit.carImg?.height || 0;
         return {
-            x: this.x,
+            x: this.x + imageWidth * 1.1,
             y: this.y,
-            width: MoveSkit.carImg?.width || 0,
-            height: MoveSkit.carImg?.height || 0
+            width: imageWidth * 1.2 / 4,
+            height: imageHeight * 1.2 / 4
         };
     }
 
@@ -81,7 +83,6 @@ export class Tike implements Liftable, InteractionArea {
     }
 
     get weMovedOut(): boolean {
-        return false;
         return this._isTransitioning && this.x >= this.startX + this.TRANSITION_DISTANCE;
     }
 
@@ -97,8 +98,8 @@ export class Tike implements Liftable, InteractionArea {
             this.jitterI++;
             if (this.jitterI >= this.carJitters.length) this.jitterI = 0;
             yOffset = this._isTransitioning
-                ? this.carJitters[this.jitterI] / 2
-                : this.carJitters[this.jitterI];
+                ? this.carJitters[this.jitterI] / 4
+                : this.carJitters[this.jitterI] / 2;
         }
 
         this.p.image(

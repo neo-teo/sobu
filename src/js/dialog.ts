@@ -3,12 +3,12 @@ import type p5 from "p5";
 export class Dialog {
     private readonly script: string[] = [
         "287 Evergreen Ave, Bushwick NY\n\n\nJuly 1st 2024",
-        "It isn't easy to see the things you saw potential in and kept",
-        "just to realize they are now taking up space.",
+        "It's tough looking at the things you saw potential in and kept",
+        "knowing you won't, or shouldn't bring with you on your new chapter.",
         "Moving isn't all bad though.",
-        "when it poured on Wriston and we moved 7 people with 3 people,",
-        "or when we moved out of 102 Governor in the A3,",
-        "or when we moved to Bushwick and had our first visit to Dicayagua.",
+        "Like when it poured on Wriston and we moved a 100$ futon and endless boxes",
+        "or when we moved out of 102 Governor in Munetta,",
+        "or when we moved to sobu and had our first Dicayagua trip.",
         "Anyway -- time to get these boxes to the bay so I can move on in life.",
     ];
 

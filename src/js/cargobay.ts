@@ -1,7 +1,5 @@
 import type p5 from "p5";
 import type { Liftable } from "./liftable";
-import { MoveSkit } from "./moveskit";
-import { Tike } from "./tike";
 
 export class CargoBay {
     private p: p5;  // Store the p5 instance
@@ -9,7 +7,6 @@ export class CargoBay {
     private static images: p5.Image[] = [];
 
     private liftables: Liftable[] = [];
-    private tike: Tike;
 
     private readonly bayWidth = 250;
     private readonly bayHeight = 400;
@@ -27,8 +24,6 @@ export class CargoBay {
         this.p = p;
 
         this.liftables = liftables;
-
-        this.tike = new Tike(p, liftables);
 
         this.targetWeight = this.calculateTotalWeight();
         this.displayWeight = this.targetWeight;
@@ -101,7 +96,7 @@ export class CargoBay {
     }
 
     draw(): void {
-        if (!CargoBay.images[0] || !CargoBay.images[1] || !CargoBay.images[2] || !MoveSkit.carImg) return;
+        if (!CargoBay.images[0] || !CargoBay.images[1] || !CargoBay.images[2]) return;
 
         let rectW = 10;
 
@@ -139,9 +134,6 @@ export class CargoBay {
                     ? weight.toFixed(0)
                     : weight.toFixed(1)
             , CargoBay.images[2].width / 2.55, -this.bayHeight / 1.58);
-
-
-        this.tike.draw(weight > 50 && weight < 100);
 
         this.p.pop();
     }

@@ -1,37 +1,119 @@
 import type p5 from "p5";
-import type { Liftable } from "./liftable";
+import { LiftableMixin, type Liftable, type InteractionArea } from "./liftable";
 import { MoveSkit } from "./moveskit";
 
-export class Tike {
-    private p: p5;  // Store the p5 instance
+export class Tike implements Liftable, InteractionArea {
+    private p: p5;
+    private liftableImpl: LiftableMixin;
+    isLifted: boolean = false;
+    private _x: number;
+    private _y: number;
 
-    constructor(p: p5, liftables: Liftable[]) {
-        this.p = p;
+    readonly weight: number = 0;
 
-        // this.liftables = liftables;
-    }
+    private isTransitioning: boolean = false;
+    private transitionX: number = 0;
+    private readonly TRANSITION_SPEED = 0.2;
+    private readonly TRANSITION_DISTANCE = 50;
+    private startX: number = 0;
 
-    private carJitters = [-1, 2, 1, -1, -1, 1, 2, 0, -2];
+    private carJitters = [-1, 1, 1, -1, -1, 1, 2, 0, -2];
     private jitterI = 0;
 
-    // NOTE: this draws the car at 0, 0. It expects called to translate it to the correct position
+    constructor(p: p5, x: number, y: number) {
+        this.p = p;
+        this._x = x;
+        this._y = y;
+
+        // Create a proper InteractionArea implementation
+        const interactionArea: InteractionArea = {
+            getCollisionBounds: () => ({
+                x: this._x,
+                y: this._y,
+                width: MoveSkit.carImg?.width || 0,
+                height: MoveSkit.carImg?.height || 0
+            })
+        };
+
+        this.liftableImpl = new LiftableMixin(p, x, y, interactionArea);
+    }
+
+    get x(): number { return this.isTransitioning ? this.transitionX : this.liftableImpl.x; }
+    get y(): number { return this.liftableImpl.y; }
+    get vx(): number { return this.liftableImpl.vx; }
+    get vy(): number { return this.liftableImpl.vy; }
+
+    lift(): void {
+        if (this.isLifted) return;
+        this.isLifted = true;
+        this.isTransitioning = true;
+        this.startX = this.liftableImpl.x;
+        this.transitionX = this.startX;
+    }
+
+    drop(): void {
+        // Car can't be dropped
+    }
+
+    followSprite(spriteX: number, spriteY: number): void {
+        // Car doesn't follow sprite
+    }
+
+    isNearby(spriteX: number, spriteY: number, threshold: number = 100): boolean {
+        return this.liftableImpl.isNearby(spriteX, spriteY, threshold);
+    }
+
+    getCollisionBounds() {
+        return {
+            x: this.x,
+            y: this.y,
+            width: MoveSkit.carImg?.width || 0,
+            height: MoveSkit.carImg?.height || 0
+        };
+    }
+
+    getCollisionBoundsCenter(): { x: number; y: number; } {
+        return this.liftableImpl.getCollisionBoundsCenter();
+    }
+
+    setObstacles(obstacles: InteractionArea[]): void {
+        this.liftableImpl.setObstacles(obstacles);
+    }
+
+    update(): void {
+        if (this.isTransitioning) {
+            if (this.transitionX < this.startX + this.TRANSITION_DISTANCE) {
+                this.transitionX += this.TRANSITION_SPEED;
+            }
+        } else {
+            this.liftableImpl.update();
+        }
+    }
+
+    get weMovedOut(): boolean {
+        return this.isTransitioning && this.x >= this.startX + this.TRANSITION_DISTANCE;
+    }
+
     draw(ignited: boolean): void {
         if (!MoveSkit.carImg) return;
 
+        this.p.push();
         this.p.noSmooth();
-
         this.p.imageMode(this.p.CENTER);
 
+        let yOffset = 0;
         if (ignited) {
-            // car starting sound car sound engine running
             this.jitterI++;
             if (this.jitterI >= this.carJitters.length) this.jitterI = 0;
+            yOffset = this.isTransitioning
+                ? this.carJitters[this.jitterI] / 2
+                : this.carJitters[this.jitterI];
         }
 
         this.p.image(
             MoveSkit.carImg,
-            MoveSkit.carImg.width * 1.1,
-            this.carJitters[this.jitterI],
+            this.x + MoveSkit.carImg.width * 1.1,
+            this.y + yOffset,
             MoveSkit.carImg.width * 1.2,
             MoveSkit.carImg.height * 1.2
         );

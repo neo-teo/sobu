@@ -48,6 +48,11 @@ const sketch = (p: P5) => {
 
         p.background(255);
 
+        if (evergreen.weMovedOut()) {
+            moveskit.draw();
+            return;
+        }
+
         sprite.handleInput();
 
         evergreen.update();

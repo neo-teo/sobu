@@ -5,6 +5,7 @@ import { Plant } from "./plant";
 import { CargoBay } from "./cargobay";
 import { Chest } from "./chest";
 import Sprite from "./sprite";
+import { Tike } from "./tike";
 
 export class Evergreen {
     walls: Wall[];
@@ -14,6 +15,7 @@ export class Evergreen {
     cargobay: CargoBay;
     sprite: Sprite;
     p: p5;
+    tike: Tike;
 
     constructor(p: p5, sprite: Sprite) {
         this.p = p;
@@ -41,6 +43,8 @@ export class Evergreen {
             ...this.plants,
             this.chest
         ]);
+
+        this.tike = new Tike(p, p.width - 150, p.height / 2);
     }
 
     drawCargobay(): void {
@@ -50,29 +54,37 @@ export class Evergreen {
     }
 
     draw(): void {
-
         const liftables = [...this.boxes, this.chest, ...this.plants];
 
         liftables.forEach(obj => {
             if (!obj.isLifted && !obj.vx && !obj.vy) obj.draw();
         });
 
+        if (!this.tike.isLifted) {
+            this.tike.draw(this.cargobay.whatIsWeight() > 50 && this.cargobay.whatIsWeight() < 100);
+        }
+
         this.sprite.draw();
 
         liftables.forEach(obj => {
             if (obj.isLifted || obj.vx !== 0 || obj.vy !== 0) obj.draw();
         });
+
+        if (this.tike.isLifted) {
+            this.tike.draw(true);
+        }
     }
 
     update(): void {
         this.boxes.forEach((box) => box.update());
         this.chest.update();
         this.plants.forEach((plant) => plant.update());
+        this.tike.update();
     }
 
     setupObstacles(): void {
         const obstacles = [...this.walls, ...this.boxes, ...this.plants, this.chest];
-        const liftables = [...this.boxes, ...this.plants, this.chest];
+        const liftables = [...this.boxes, ...this.plants, this.chest, this.tike];
 
         this.sprite.setObstacles(obstacles);
         this.sprite.setLiftableObjects(liftables);
@@ -80,6 +92,11 @@ export class Evergreen {
         this.boxes.forEach((box) => box.setObstacles(obstacles));
         this.plants.forEach((plant) => plant.setObstacles(obstacles));
         this.chest.setObstacles(obstacles);
+        this.tike.setObstacles(obstacles);
+    }
+
+    weMovedOut(): boolean {
+        return this.tike.weMovedOut;
     }
 
     private createWalls(): Wall[] {

@@ -1,6 +1,7 @@
 import type p5 from "p5";
 import Sprite from "./sprite";
 import { Liftable } from "./liftable";
+import { Wall } from "./wall";
 
 export class MoveSkit {
     private static backgroundImg: p5.Image | null = null;
@@ -10,11 +11,19 @@ export class MoveSkit {
     private currentBounceOffset: number = 0;
     private readonly BOUNCE_HEIGHTS: number[] = [0, -1, -3, -1, -3, -2, -1, -3];  // Pixel positions for bounce
     private readonly FRAME_DELAY: number = 10;  // How many frames to wait before changing height
+    private readonly ROTATION_ANGLE = 0.05; // Maximum rotation in radians
+    private readonly ROTATION_SPEED = 0.02; // Speed of rotation cycle
+    private rotationOffset: number = 0;
 
     private p: p5;
+    private liftables: Liftable[] = [];
 
     constructor(p: p5) {
         this.p = p;
+    }
+
+    public setLiftables(liftables: Liftable[]): void {
+        this.liftables = liftables;
     }
 
     static loadImages(p: p5): void {
@@ -55,30 +64,46 @@ export class MoveSkit {
             MoveSkit.carImg.height * 3
         );
         this.p.pop();
+        this.drawLiftables();
     }
 
-    drawLiftables(liftables: Liftable[]): void {
-        if (!MoveSkit.carImg) return;
+    private drawLiftables(): void {
+        if (!MoveSkit.carImg || this.liftables.length === 0) return;
 
         const carTop = this.p.height - MoveSkit.carImg.height * 2.7;
-        let currentY = carTop - 20; // Start stacking above car
-        const centerX = this.p.width / 2;
+        let currentY = carTop - 40;
+        const centerX = this.p.width / 2 - 20;
+
+        this.rotationOffset = Math.sin(this.frameCount * this.ROTATION_SPEED) * this.ROTATION_ANGLE;
 
         this.p.push();
         this.p.imageMode(this.p.CENTER);
-        this.p.noSmooth();
 
-        for (const liftable of liftables) {
-            // Draw each liftable centered above the car
+        // Apply stack rotation
+        this.p.translate(centerX, carTop);
+        this.p.rotate(this.rotationOffset);
+        this.p.translate(-centerX, -carTop);
+
+        for (const liftable of this.liftables) {
+            // Draw with car bounce
             this.p.image(
                 liftable.img,
                 centerX,
-                currentY,
-                liftable.img.width * 2,  // Match the scale of other sprites
+                currentY + this.currentBounceOffset,
+                liftable.img.width * 2,
                 liftable.img.height * 2
             );
-            currentY -= liftable.img.height * 2 + 10; // Add some padding between items
+
+            currentY -= liftable.img.height * 2;
         }
+
+        this.p.image(
+            Wall.images[0],
+            centerX,
+            carTop + 10 + this.currentBounceOffset,
+            Wall.images[0].width * 0.2,
+            Wall.images[0].height * .5
+        );
 
         this.p.pop();
     }

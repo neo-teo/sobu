@@ -2,7 +2,7 @@ import p5 from "p5";
 import { Obstacle } from "./obstacle";
 
 export class Wall extends Obstacle {
-    private static images: p5.Image[] = [];
+    public static images: p5.Image[] = [];
 
     img: p5.Image;
 

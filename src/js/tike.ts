@@ -8,12 +8,13 @@ export class Tike implements Liftable, InteractionArea {
     isLifted: boolean = false;
     private _x: number;
     private _y: number;
+    img: p5.Image;
 
     readonly weight: number = 0;
 
     private _isTransitioning: boolean = false;
     private transitionX: number = 0;
-    private readonly TRANSITION_SPEED = 0.2;
+    private readonly TRANSITION_SPEED = 0.3;
     private readonly TRANSITION_DISTANCE = 100;
     private startX: number = 0;
 
@@ -24,6 +25,7 @@ export class Tike implements Liftable, InteractionArea {
         this.p = p;
         this._x = x;
         this._y = y;
+        this.img = MoveSkit.carImg || p.createImage(0, 0);
 
         this.liftableImpl = new LiftableMixin(p, x, y, this);
     }
@@ -87,8 +89,6 @@ export class Tike implements Liftable, InteractionArea {
     }
 
     draw(ignited: boolean): void {
-        if (!MoveSkit.carImg) return;
-
         this.p.push();
         this.p.noSmooth();
         this.p.imageMode(this.p.CENTER);
@@ -103,11 +103,11 @@ export class Tike implements Liftable, InteractionArea {
         }
 
         this.p.image(
-            MoveSkit.carImg,
-            this.x + MoveSkit.carImg.width * 1.1,
+            this.img,
+            this.x + this.img.width * 1.1,
             this.y + yOffset,
-            MoveSkit.carImg.width * 1.2,
-            MoveSkit.carImg.height * 1.2
+            this.img.width * 1.2,
+            this.img.height * 1.2
         );
 
         this.p.pop();

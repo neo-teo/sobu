@@ -66,6 +66,7 @@ export class MoveSkit {
 
         this.p.push();
         this.p.imageMode(this.p.CENTER);
+        this.p.noSmooth();
 
         for (const liftable of liftables) {
             // Draw each liftable centered above the car

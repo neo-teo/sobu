@@ -1,5 +1,6 @@
 import type p5 from "p5";
 import Sprite from "./sprite";
+import { Liftable } from "./liftable";
 
 export class MoveSkit {
     private static backgroundImg: p5.Image | null = null;
@@ -53,6 +54,31 @@ export class MoveSkit {
             MoveSkit.carImg.width * 3,
             MoveSkit.carImg.height * 3
         );
+        this.p.pop();
+    }
+
+    drawLiftables(liftables: Liftable[]): void {
+        if (!MoveSkit.carImg) return;
+
+        const carTop = this.p.height - MoveSkit.carImg.height * 2.7;
+        let currentY = carTop - 20; // Start stacking above car
+        const centerX = this.p.width / 2;
+
+        this.p.push();
+        this.p.imageMode(this.p.CENTER);
+
+        for (const liftable of liftables) {
+            // Draw each liftable centered above the car
+            this.p.image(
+                liftable.img,
+                centerX,
+                currentY,
+                liftable.img.width * 2,  // Match the scale of other sprites
+                liftable.img.height * 2
+            );
+            currentY -= liftable.img.height * 2 + 10; // Add some padding between items
+        }
+
         this.p.pop();
     }
 

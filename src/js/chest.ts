@@ -6,6 +6,8 @@ export class Chest extends Obstacle implements Liftable, InteractionArea {
     private static image: p5.Image;
     private liftableImpl: LiftableMixin;
     isLifted: boolean = false;
+    img: p5.Image;
+
 
     get vx(): number { return this.liftableImpl.vx; }
     get vy(): number { return this.liftableImpl.vy; }
@@ -16,6 +18,8 @@ export class Chest extends Obstacle implements Liftable, InteractionArea {
         this.width = Chest.image.width;
         this.height = Chest.image.height;
         this.liftableImpl = new LiftableMixin(p, x, y, this);
+
+        this.img = Chest.image;
     }
 
     lift(): void {

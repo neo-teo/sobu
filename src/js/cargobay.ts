@@ -29,8 +29,8 @@ export class CargoBay {
         this.displayWeight = this.targetWeight;
     }
 
-    private calculateTotalWeight(): number {
-        let totalWeight = 0;
+    public getLiftablesInBay(): Liftable[] {
+        const inBayLiftables: Liftable[] = [];
         const bounds = this.getBayBounds();
 
         for (const liftable of this.liftables) {
@@ -39,9 +39,19 @@ export class CargoBay {
                 objCenter.x <= bounds.x + bounds.width &&
                 objCenter.y >= bounds.y &&
                 objCenter.y <= bounds.y + bounds.height) {
-                totalWeight += liftable.weight;
+                inBayLiftables.push(liftable);
             }
         }
+        return inBayLiftables;
+    }
+
+    private calculateTotalWeight(): number {
+        let totalWeight = 0;
+
+        for (const liftable of this.getLiftablesInBay()) {
+            totalWeight += liftable.weight;
+        }
+
         return totalWeight;
     }
 

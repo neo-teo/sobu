@@ -15,6 +15,7 @@ export interface Liftable {
     readonly weight: number;
     readonly vx: number;
     readonly vy: number;
+    readonly img: p5.Image;
     isLifted: boolean;
     lift(): void;
     drop(direction: 'left' | 'right' | 'up' | 'down'): void;
@@ -26,7 +27,7 @@ export interface Liftable {
 }
 
 // Mixin class to provide default Liftable implementations
-export class LiftableMixin implements Liftable {
+export class LiftableMixin implements Omit<Liftable, 'img'> {
     weight: number = 50.0;  // Default weight as float
     isLifted: boolean = false;
 

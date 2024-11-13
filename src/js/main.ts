@@ -48,6 +48,8 @@ const sketch = (p: P5) => {
 
         if (evergreen.weMovedOut()) {
             moveskit.draw();
+            const moveOutWith = evergreen.movedOutWith();
+            moveskit.drawLiftables(moveOutWith);
             return;
         }
 

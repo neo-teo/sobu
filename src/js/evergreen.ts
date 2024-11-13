@@ -6,6 +6,7 @@ import { CargoBay } from "./cargobay";
 import { Chest } from "./chest";
 import Sprite from "./sprite";
 import { Tike } from "./tike";
+import { Liftable } from "./liftable";
 
 export class Evergreen {
     walls: Wall[];
@@ -92,6 +93,10 @@ export class Evergreen {
         this.plants.forEach((plant) => plant.setObstacles(obstacles));
         this.chest.setObstacles(obstacles);
         this.tike.setObstacles(obstacles);
+    }
+
+    public movedOutWith(): Liftable[] {
+        return this.cargobay.getLiftablesInBay();
     }
 
     weMovedOut(): boolean {

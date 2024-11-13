@@ -46,7 +46,7 @@ const sketch = (p: P5) => {
 
         p.background(255);
 
-        if (true) {
+        if (evergreen.weMovedOut()) {
             const moveOutWith = evergreen.movedOutWith();
             moveskit.setLiftables(moveOutWith);
             moveskit.draw();

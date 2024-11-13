@@ -52,16 +52,16 @@ export class MoveSkit {
         this.p.image(
             Sprite.images.standingRight,
             this.p.width / 2 - Sprite.images.standingRight.width - 20,
-            this.p.height - Sprite.images.standingRight.height * 3 + this.currentBounceOffset,
+            this.p.height - Sprite.images.standingRight.height * 2.55 + this.currentBounceOffset,
             Sprite.images.standingRight.width * 2,
             Sprite.images.standingRight.height * 2
         );
         this.p.image(
             MoveSkit.carImg,
             this.p.width / 2 - MoveSkit.carImg.width * 3 / 2,
-            this.p.height - MoveSkit.carImg.height * 2.7 + this.currentBounceOffset,
-            MoveSkit.carImg.width * 3,
-            MoveSkit.carImg.height * 3
+            this.p.height - MoveSkit.carImg.height * 2.4 + this.currentBounceOffset,
+            MoveSkit.carImg.width * 2.7,
+            MoveSkit.carImg.height * 2.7
         );
         this.p.pop();
         this.drawLiftables();
@@ -70,37 +70,48 @@ export class MoveSkit {
     private drawLiftables(): void {
         if (!MoveSkit.carImg || this.liftables.length === 0) return;
 
-        const carTop = this.p.height - MoveSkit.carImg.height * 2.7;
-        let currentY = carTop - 40;
+        const sortedLiftables = [...this.liftables]
+            .sort((a, b) => b.weight - a.weight)
+            .reverse();
+
+        // Calculate total stack height
+        let totalHeight = 0;
+        sortedLiftables.forEach(liftable => {
+            totalHeight += liftable.img.height * 2;
+        });
+
+        const carTop = this.p.height - MoveSkit.carImg.height * 2.4;
+
+        let currentY = carTop - totalHeight;
         const centerX = this.p.width / 2 - 20;
 
-        this.rotationOffset = Math.sin(this.frameCount * this.ROTATION_SPEED) * this.ROTATION_ANGLE;
+        this.rotationOffset = Math.round(Math.sin(this.frameCount * this.ROTATION_SPEED) * 3) / 3 * this.ROTATION_ANGLE;
 
         this.p.push();
-        this.p.imageMode(this.p.CENTER);
+        this.p.imageMode(this.p.CORNER);
 
         // Apply stack rotation
         this.p.translate(centerX, carTop);
         this.p.rotate(this.rotationOffset);
         this.p.translate(-centerX, -carTop);
 
-        for (const liftable of this.liftables) {
-            // Draw with car bounce
+        for (const liftable of sortedLiftables) {
             this.p.image(
                 liftable.img,
-                centerX,
+                centerX - liftable.img.width,
                 currentY + this.currentBounceOffset,
                 liftable.img.width * 2,
                 liftable.img.height * 2
             );
 
-            currentY -= liftable.img.height * 2;
+            currentY += liftable.img.height * 2;
         }
 
+        // Wall image (centered X, CORNER mode Y)
         this.p.image(
             Wall.images[0],
-            centerX,
-            carTop + 10 + this.currentBounceOffset,
+            centerX - (Wall.images[0].width * 0.1), // Center X
+            currentY + this.currentBounceOffset,
             Wall.images[0].width * 0.2,
             Wall.images[0].height * .5
         );

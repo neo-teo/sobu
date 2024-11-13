@@ -17,6 +17,7 @@ export class Evergreen {
     sprite: Sprite;
     p: p5;
     tike: Tike;
+    moveOutWith: Liftable[] | null;
 
     constructor(p: p5) {
         this.p = p;
@@ -45,6 +46,8 @@ export class Evergreen {
             ...this.plants,
             this.chest
         ]);
+
+        this.moveOutWith = null;
     }
 
     drawCargobay(): void {
@@ -96,7 +99,8 @@ export class Evergreen {
     }
 
     public movedOutWith(): Liftable[] {
-        return this.cargobay.getLiftablesInBay();
+        if (!this.moveOutWith) this.moveOutWith = this.cargobay.getLiftablesInBay();
+        return this.moveOutWith;
     }
 
     weMovedOut(): boolean {

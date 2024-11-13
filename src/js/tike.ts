@@ -14,7 +14,7 @@ export class Tike implements Liftable, InteractionArea {
 
     private _isTransitioning: boolean = false;
     private transitionX: number = 0;
-    private readonly TRANSITION_SPEED = 0.3;
+    private readonly TRANSITION_SPEED = 0.8;
     private readonly TRANSITION_DISTANCE = 100;
     private startX: number = 0;
 

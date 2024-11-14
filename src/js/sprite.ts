@@ -3,6 +3,7 @@ import p5 from 'p5'; // Import the p5 library
 import { Obstacle } from './obstacle';
 import type { Liftable } from './liftable';
 import { Tike } from './tike';
+import { CargoBay } from './cargobay';
 
 export default class Sprite {
     static images: { [key: string]: p5.Image } = {};
@@ -27,10 +28,12 @@ export default class Sprite {
     private lastDirection: 'left' | 'right' | 'up' | 'down' = 'down';
 
     private tike: Tike;  // Add reference to Tike
+    private cargoBay: CargoBay;  // Add this property
 
-    constructor(p: p5, tike: Tike) {  // Add tike parameter
+    constructor(p: p5, tike: Tike, cargoBay: CargoBay) {  // Add cargoBay parameter
         this.p = p;
         this.tike = tike;
+        this.cargoBay = cargoBay;
         this.x = p.width / 2 - 100;
         this.y = p.height / 2 + 150;
         this.vx = 0;
@@ -176,6 +179,11 @@ export default class Sprite {
         let closestDistance = Infinity;
 
         for (const liftable of this.liftableObjects) {
+            // Skip Tike if cargo bay is overweight
+            if (liftable === this.tike && this.cargoBay.isOverweight()) {
+                continue;
+            }
+
             if (liftable.isNearby(spriteCenter.x, spriteCenter.y)) {
                 const liftableCenter = liftable.getCollisionBoundsCenter();
                 const dx = liftableCenter.x - spriteCenter.x;

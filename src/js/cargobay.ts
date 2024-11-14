@@ -132,7 +132,7 @@ export class CargoBay {
         this.p.image(CargoBay.images[2], 20, -this.bayHeight / 1.65);
 
         this.p.fill(74, 246, 38);
-        if (weight > 70) {
+        if (this.isOverweight()) {
             this.p.fill('red');
         }
         this.p.textAlign(this.p.CENTER, this.p.CENTER);
@@ -140,7 +140,7 @@ export class CargoBay {
         this.p.text(
             weight === 0
                 ? '--'
-                : weight > 70
+                : this.isOverweight()
                     ? weight.toFixed(0)
                     : weight.toFixed(1)
             , CargoBay.images[2].width / 2.55, -this.bayHeight / 1.58);
@@ -154,5 +154,9 @@ export class CargoBay {
             p.loadImage('/cargobay/vertical.png'),
             p.loadImage('/cargobay/display.png')
         ];
+    }
+
+    public isOverweight(): boolean {
+        return this.whatIsWeight() > 99;
     }
 }

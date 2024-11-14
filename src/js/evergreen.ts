@@ -23,7 +23,6 @@ export class Evergreen {
     constructor(p: p5) {
         this.p = p;
         this.tike = new Tike(p, p.width - 150, p.height / 2);
-        this.sprite = new Sprite(p, this.tike);
 
         this.walls = this.createWalls();
 
@@ -47,6 +46,7 @@ export class Evergreen {
             ...this.plants,
             this.chest
         ]);
+        this.sprite = new Sprite(p, this.tike, this.cargobay);
 
         this.moveOutWith = null;
     }
@@ -65,7 +65,7 @@ export class Evergreen {
         });
 
         if (!this.tike.isLifted) {
-            this.tike.draw(this.cargobay.whatIsWeight() > 50 && this.cargobay.whatIsWeight() < 100);
+            this.tike.draw(this.cargobay.whatIsWeight() > 50 && this.cargobay.whatIsWeight() < 99);
         }
 
         this.sprite.draw();

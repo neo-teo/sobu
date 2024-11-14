@@ -6,10 +6,10 @@ export class Dialog {
         "It's tough looking at the things you saw potential in and kept",
         "knowing you won't, or shouldn't bring with you on your new chapter.",
         "Moving isn't all bad though.",
-        "Like when it poured on Wriston and we moved a 100$ futon and endless boxes",
-        "or when we moved out of 102 Governor in Munetta,",
-        "or when we moved to sobu and had our first Dicayagua trip.",
-        "Anyway -- time to get these boxes to the bay so I can move on in life.",
+        "Like when it poured on Wriston and we moved the 100$ fake leather futon from amazon",
+        "or when we moved out of 102 Governor with our last coffee from the shop with munetta,",
+        "or when we moved to Sobu and had our first Dicayagua trip.",
+        "On to the next.",
     ];
 
     private p: p5;
@@ -42,6 +42,7 @@ export class Dialog {
     }
 
     update(): void {
+        if (this.isDone) return;
         const now = this.p.millis();
 
         if (this.currentIndex < this.targetText.length &&
@@ -54,9 +55,11 @@ export class Dialog {
         }
     }
 
+    isDone = false;
+
     handleInput(): void {
         if (this.p.keyIsPressed && this.p.keyCode === 32) {
-            if (this.isWaitingForNext && !this.wasSpacePressed && this.currentScriptIndex < this.script.length - 1) {
+            if (this.isWaitingForNext && !this.wasSpacePressed) {
                 this.currentScriptIndex++;
                 this.setText(this.script[this.currentScriptIndex]);
             }
@@ -64,12 +67,19 @@ export class Dialog {
         } else {
             this.wasSpacePressed = false;
         }
+
+        // if the last dialog is done, set the moveskit weArrived to true
+        if (this.currentScriptIndex > this.script.length - 1) {
+            this.isDone = true;
+        }
     }
 
     draw(): void {
+        if (this.isDone) return;
+
         const padding = 20;
         const paddingY = padding / 1.25;
-        const boxWidth = 500;
+        const boxWidth = 450;
         const boxHeight = 100;
         const lineHeight = 24; // Spacing between lines
         const maxWidth = boxWidth - (padding * 2);
@@ -84,7 +94,7 @@ export class Dialog {
         this.p.pop();
 
         this.p.fill(0);
-        this.p.textSize(15);
+        this.p.textSize(13);
 
         const words = this.currentText.split(' ');
         let currentLine = '';
@@ -108,7 +118,7 @@ export class Dialog {
         }
 
         if (this.isWaitingForNext && this.currentScriptIndex < this.script.length - 1) {
-            this.p.textSize(12);
+            this.p.textSize(10);
             this.p.text("→ space", dialogX + boxWidth - padding * 5, dialogY + boxHeight - paddingY);
         }
     }

@@ -19,7 +19,7 @@ export class Tutorial {
 
         switch (this.currentStep) {
             case 'waiting':
-                if (timeSinceStart > 2000) {
+                if (timeSinceStart > 1000) {
                     this.currentStep = 'movement';
                     this.stepStartTime = now;
                 }
@@ -29,7 +29,7 @@ export class Tutorial {
                 if (sprite.vx !== 0 || sprite.vy !== 0) {
                     setTimeout(() => {
                         this.hasMovedBefore = true;
-                    }, 2000);
+                    }, 500);
                 }
 
                 if (this.hasMovedBefore) {
@@ -39,7 +39,7 @@ export class Tutorial {
                 break;
 
             case 'transition':
-                if (timeSinceStart > 2000) {
+                if (timeSinceStart > 500) {
                     this.currentStep = 'interaction';
                     this.stepStartTime = now;
                 }
@@ -49,7 +49,7 @@ export class Tutorial {
                 if (sprite.hasInteractedRecently()) {
                     setTimeout(() => {
                         this.hasInteractedBefore = true;
-                    }, 2000);
+                    }, 500);
                 }
 
                 if (this.hasInteractedBefore) {
@@ -59,7 +59,7 @@ export class Tutorial {
                 break;
 
             case 'ending':
-                if (timeSinceStart > 2000) {
+                if (timeSinceStart > 1000) {
                     this.currentStep = 'complete';
                 }
                 break;
@@ -80,7 +80,7 @@ export class Tutorial {
             ? "WASD / Arrows to move"
             : "E to interact";
 
-        this.p.text(text, this.p.width / 2, this.p.height / 2);
+        this.p.text(text, this.p.width / 2, this.p.height - 100);
         this.p.pop();
     }
 

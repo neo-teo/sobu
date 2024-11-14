@@ -63,7 +63,9 @@ const sketch = (p: p5) => {
             }
 
             moveskit.setLiftables(movedOutWith);
-            moveskit.draw();
+            moveskit.draw(dialogManager.dialogIsDone());
+            dialogManager.update(evergreen.sprite);
+            dialogManager.draw();
             return;
         }
 

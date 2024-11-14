@@ -34,14 +34,15 @@ export class MoveSkit {
         this.carImg = p.loadImage('/tike.png');
     }
 
-    draw(): void {
+    draw(dialogIsDone: boolean): void {
         if (!MoveSkit.backgroundImg || !MoveSkit.carImg || !Sprite.images.standingRight) return;
 
-        if (this.startTime === null) {
+        if (dialogIsDone && this.startTime === null) {
             this.startTime = Date.now();
         }
 
-        if (this.startTime && Date.now() - this.startTime >= 10000) {
+        // 5 seconds after we've finished the dialog
+        if (this.startTime && Date.now() - this.startTime >= 5000 && dialogIsDone) {
             this.weArrived = true;
         }
 

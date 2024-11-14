@@ -29,6 +29,10 @@ export class DialogManager {
         }
     }
 
+    dialogIsDone(): boolean {
+        return this.dialog.isDone;
+    }
+
     draw(): void {
         if (this.isTutorialActive) {
             this.tutorial.draw();

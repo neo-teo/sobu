@@ -18,6 +18,9 @@ export class MoveSkit {
     private p: p5;
     private liftables: Liftable[] = [];
 
+    public weArrived: boolean = false;
+    private startTime: number | null = null;
+
     constructor(p: p5) {
         this.p = p;
     }
@@ -33,6 +36,14 @@ export class MoveSkit {
 
     draw(): void {
         if (!MoveSkit.backgroundImg || !MoveSkit.carImg || !Sprite.images.standingRight) return;
+
+        if (this.startTime === null) {
+            this.startTime = Date.now();
+        }
+
+        if (this.startTime && Date.now() - this.startTime >= 10000) {
+            this.weArrived = true;
+        }
 
         let { displayWidth, displayHeight } = this.getBackgroundDim();
 

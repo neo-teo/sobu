@@ -6,9 +6,10 @@ export class Tike implements Liftable, InteractionArea {
     private p: p5;
     private liftableImpl: LiftableMixin;
     isLifted: boolean = false;
-    private _x: number;
-    private _y: number;
     img: p5.Image;
+
+    name: string = 'Tike';
+    description: string = 'Great for carrying and moving things';
 
     readonly weight: number = 0;
 
@@ -23,8 +24,6 @@ export class Tike implements Liftable, InteractionArea {
 
     constructor(p: p5, x: number, y: number) {
         this.p = p;
-        this._x = x;
-        this._y = y;
         this.img = MoveSkit.carImg || p.createImage(0, 0);
 
         this.liftableImpl = new LiftableMixin(p, x, y, this);

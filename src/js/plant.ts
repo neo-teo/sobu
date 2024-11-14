@@ -8,6 +8,9 @@ export class Plant extends Obstacle implements Liftable, InteractionArea {
     isLifted: boolean = false;
     img: p5.Image;
 
+    name: string;
+    description: string;
+
     get vx(): number { return this.liftableImpl.vx; }
     get vy(): number { return this.liftableImpl.vy; }
 
@@ -19,10 +22,14 @@ export class Plant extends Obstacle implements Liftable, InteractionArea {
 
         switch (type) {
             case 'bird':
+                this.name = 'Bird of Paradise';
+                this.description = 'Good for shade';
                 this.img = Plant.images[0];
                 this.weight = 4.8;
                 break;
             case 'snake':
+                this.name = 'Snake Plant';
+                this.description = 'Good for poking things';
                 this.img = Plant.images[1];
                 this.weight = 2.3;
                 break;

@@ -8,6 +8,8 @@ export class Chest extends Obstacle implements Liftable, InteractionArea {
     isLifted: boolean = false;
     img: p5.Image;
 
+    name: string = 'Chest';
+    description: string = 'Good for storage, and for taking a seat';
 
     get vx(): number { return this.liftableImpl.vx; }
     get vy(): number { return this.liftableImpl.vy; }

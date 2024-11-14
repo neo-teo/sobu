@@ -8,22 +8,32 @@ export class Box extends Obstacle implements Liftable, InteractionArea {
     isLifted: boolean = false;
     img: p5.Image;
 
+    name: string;
+    description: string;
+
     get vx(): number { return this.liftableImpl.vx; }
     get vy(): number { return this.liftableImpl.vy; }
 
+    // TODO: change size with the thing it contains, base size and description based off that
     constructor(p: p5, x: number, y: number, size: 'sm' | 'md' | 'lg') {
         super(p, x, y, 50, 50);
 
         switch (size) {
             case 'sm':
+                this.name = 'Small box';
+                this.description = 'Good for moving little things';
                 this.img = Box.images[0];
                 this.weight = 5.0;
                 break;
             case 'md':
+                this.name = 'Medium box';
+                this.description = 'Good for moving medium things';
                 this.img = Box.images[1];
                 this.weight = 20.8;
                 break;
             case 'lg':
+                this.name = 'Large box';
+                this.description = 'Good for moving large things';
                 this.img = Box.images[2];
                 this.weight = 8.5;
                 break;

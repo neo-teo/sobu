@@ -4,16 +4,18 @@ import { Box } from './box';
 import { Plant } from './plant';
 import { DialogManager } from './dialogmanager';
 import { MoveSkit } from './moveskit';
+import { Rivington } from './rivington';
 import { Wall } from './wall';
 import { CargoBay } from './cargobay';
 import Sprite from './sprite';
 import { Chest } from './chest';
-import { SoundManager } from './soundmanager';
+// import { SoundManager } from './soundmanager';
 
 const sketch = (p: p5) => {
     let evergreen: Evergreen;
     let dialogManager: DialogManager;
     let moveskit: MoveSkit;
+    let rivington: Rivington;
     let customFont: p5.Font;
 
     p.preload = () => {
@@ -37,6 +39,7 @@ const sketch = (p: p5) => {
         evergreen = new Evergreen(p);
         dialogManager = new DialogManager(p);
         moveskit = new MoveSkit(p);
+        rivington = new Rivington(p);
 
         evergreen.setupObstacles();
     };
@@ -49,9 +52,17 @@ const sketch = (p: p5) => {
 
         p.background(255);
 
+        // evergreen.weMovedOut()
         if (evergreen.weMovedOut()) {
-            const moveOutWith = evergreen.movedOutWith();
-            moveskit.setLiftables(moveOutWith);
+            const movedOutWith = evergreen.movedOutWith();
+
+            // moveskit.weArrived
+            if (moveskit.weArrived) {
+                rivington.draw(movedOutWith);
+                return;
+            }
+
+            moveskit.setLiftables(movedOutWith);
             moveskit.draw();
             return;
         }

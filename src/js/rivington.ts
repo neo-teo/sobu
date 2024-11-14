@@ -41,31 +41,40 @@ export class Rivington {
     private drawLiftables(liftables: Liftable[]): void {
         const sortedLiftables = [...liftables]
             .sort((a, b) => b.weight - a.weight)
-            .reverse();
 
         const centerX = this.p.width / 2;
         const itemsPerRow = 2;
-        const padding = 50; // Space between items
+        const padding = 50;
 
         this.p.push();
         this.p.imageMode(this.p.CENTER);
 
+        let y = this.p.height - 200;
+
         for (let i = 0; i < sortedLiftables.length; i++) {
             const liftable = sortedLiftables[i];
+
             const imgWidth = liftable.img.width;
             const imgHeight = liftable.img.height;
 
-            // Calculate grid position
             const col = i % itemsPerRow;
-            const row = Math.floor(i / itemsPerRow);
 
-            // Calculate x position (centered around middle of screen)
-            const x = centerX + (col === 0 ? -imgWidth / 2 - padding / 2 : imgWidth / 2 + padding / 2);
-            const y = 100 + row * (imgHeight + padding);
+            const x = centerX + (col === 0 ? -imgWidth / 2 - padding * 1.5 : imgWidth / 2 + padding * 1.5);
 
-            // Check if mouse is hovering over the liftable
-            const isHovered = this.p.mouseX > x - imgWidth / 2 &&
-                this.p.mouseX < x + imgWidth / 2 &&
+            // when is i:2, i:4, i:6, i:8
+            if (i > 0 && col === 0) {
+                // max height of previous 2 liftables.
+                let prevRowHeight = Math.max(sortedLiftables[i - 1].img.height, sortedLiftables[i - 2].img.height) / 2;
+                let thisRowHeight = liftable.img.height
+                if (sortedLiftables[i + 1]) {
+                    thisRowHeight = Math.max(liftable.img.height, sortedLiftables[i + 1]?.img.height ?? 0) / 2;
+                }
+
+                y -= prevRowHeight / 10 + thisRowHeight / 10 + 120;
+            }
+
+            const isHovered = this.p.mouseX > x - imgWidth &&
+                this.p.mouseX < x + imgWidth &&
                 this.p.mouseY > y - imgHeight / 2 &&
                 this.p.mouseY < y + imgHeight / 2;
 
@@ -73,7 +82,7 @@ export class Rivington {
 
             this.p.image(
                 liftable.img,
-                x,
+                col === 0 ? x + imgWidth / 2 : x - imgWidth / 2,
                 y,
                 liftable.img.width * scale,
                 liftable.img.height * scale

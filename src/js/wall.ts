@@ -22,8 +22,8 @@ export class Wall extends Obstacle {
 
     static loadImages(p: p5): void {
         this.images = [
-            p.loadImage('/sobu/walls/horizontal.png'),
-            p.loadImage('/sobu/walls/vertical.png'),
+            p.loadImage('/walls/horizontal.png'),
+            p.loadImage('/walls/vertical.png'),
         ];
     }
 }

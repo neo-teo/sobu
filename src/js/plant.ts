@@ -79,8 +79,8 @@ export class Plant extends Obstacle implements Liftable, InteractionArea {
 
     static loadImages(p: p5): void {
         this.images = [
-            p.loadImage('/sobu/plants/bird.png'),
-            p.loadImage('/sobu/plants/snake.png'),
+            p.loadImage('/plants/bird.png'),
+            p.loadImage('/plants/snake.png'),
         ];
     }
 

@@ -66,7 +66,7 @@ export class Chest extends Obstacle implements Liftable, InteractionArea {
     }
 
     static loadImage(p: p5): void {
-        this.image = p.loadImage('/sobu/chest.png');
+        this.image = p.loadImage('/chest.png');
     }
 
     draw(): void {

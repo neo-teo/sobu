@@ -1,4 +1,4 @@
-import P5 from 'p5';
+import p5 from 'p5';
 import { Evergreen } from './evergreen';
 import { Box } from './box';
 import { Plant } from './plant';
@@ -8,12 +8,13 @@ import { Wall } from './wall';
 import { CargoBay } from './cargobay';
 import Sprite from './sprite';
 import { Chest } from './chest';
+import { SoundManager } from './soundmanager';
 
-const sketch = (p: P5) => {
+const sketch = (p: p5) => {
     let evergreen: Evergreen;
     let dialogManager: DialogManager;
     let moveskit: MoveSkit;
-    let customFont: P5.Font;
+    let customFont: p5.Font;
 
     p.preload = () => {
         Sprite.loadImages(p);
@@ -22,9 +23,11 @@ const sketch = (p: P5) => {
         Plant.loadImages(p);
         MoveSkit.loadImages(p);
         CargoBay.loadImages(p);
-        Chest.loadImage(p)
+        Chest.loadImage(p);
 
-        customFont = p.loadFont('/sobu/pay2win.ttf');
+        // SoundManager.loadSounds(p);
+
+        customFont = p.loadFont('/pay2win.ttf');
     };
 
     p.setup = () => {
@@ -80,4 +83,4 @@ const sketch = (p: P5) => {
     };
 };
 
-new P5(sketch, document.getElementById('sketch-container') || undefined);
+new p5(sketch, document.getElementById('sketch-container') || undefined);

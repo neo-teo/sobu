@@ -27,8 +27,8 @@ export class MoveSkit {
     }
 
     static loadImages(p: p5): void {
-        this.backgroundImg = p.loadImage('/sobu/street.gif');
-        this.carImg = p.loadImage('/sobu/tike.png');
+        this.backgroundImg = p.loadImage('/street.gif');
+        this.carImg = p.loadImage('/tike.png');
     }
 
     draw(): void {

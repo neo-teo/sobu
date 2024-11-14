@@ -81,9 +81,9 @@ export class Box extends Obstacle implements Liftable, InteractionArea {
 
     static loadImages(p: p5): void {
         this.images = [
-            p.loadImage('/sobu/boxes/small.png'),
-            p.loadImage('/sobu/boxes/medium.png'),
-            p.loadImage('/sobu/boxes/large.png'),
+            p.loadImage('/boxes/small.png'),
+            p.loadImage('/boxes/medium.png'),
+            p.loadImage('/boxes/large.png'),
         ];
     }
 

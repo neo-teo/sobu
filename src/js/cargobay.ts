@@ -150,9 +150,9 @@ export class CargoBay {
 
     static loadImages(p: p5): void {
         this.images = [
-            p.loadImage('/sobu/cargobay/horizontal.png'),
-            p.loadImage('/sobu/cargobay/vertical.png'),
-            p.loadImage('/sobu/cargobay/display.png')
+            p.loadImage('/cargobay/horizontal.png'),
+            p.loadImage('/cargobay/vertical.png'),
+            p.loadImage('/cargobay/display.png')
         ];
     }
 }

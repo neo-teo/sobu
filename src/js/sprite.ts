@@ -42,14 +42,14 @@ export default class Sprite {
     }
 
     static loadImages(p: p5): void {
-        this.images.walkingUp = p.loadImage('/sobu/sprite/up.gif');
-        this.images.walkingDown = p.loadImage('/sobu/sprite/down.gif');
-        this.images.walkingLeft = p.loadImage('/sobu/sprite/left.gif');
-        this.images.walkingRight = p.loadImage('/sobu/sprite/right.gif');
-        this.images.standingLeft = p.loadImage('/sobu/sprite/left_rest.gif');  // Or separate standing images if you have them
-        this.images.standingRight = p.loadImage('/sobu/sprite/right_rest.gif');
-        this.images.standingUp = p.loadImage('/sobu/sprite/up_rest.gif');
-        this.images.standingDown = p.loadImage('/sobu/sprite/down_rest.gif');
+        this.images.walkingUp = p.loadImage('/sprite/up.gif');
+        this.images.walkingDown = p.loadImage('/sprite/down.gif');
+        this.images.walkingLeft = p.loadImage('/sprite/left.gif');
+        this.images.walkingRight = p.loadImage('/sprite/right.gif');
+        this.images.standingLeft = p.loadImage('/sprite/left_rest.gif');  // Or separate standing images if you have them
+        this.images.standingRight = p.loadImage('/sprite/right_rest.gif');
+        this.images.standingUp = p.loadImage('/sprite/up_rest.gif');
+        this.images.standingDown = p.loadImage('/sprite/down_rest.gif');
 
         this.imagesLoaded = true;
     }

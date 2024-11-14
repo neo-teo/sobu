@@ -33,21 +33,23 @@ export class Rivington {
         this.p.background('#FFF5E9');
         this.walls.forEach((w) => w.draw());
         this.p.image(this.tikeImg, -30, this.p.windowHeight / 2 - this.tikeImg.height / 2, this.tikeImg.width * 1.2, this.tikeImg.height * 1.2);
-
+        this.setLiftablePositions(liftables);
+        liftables.forEach(liftable => liftable.setJumpingEnabled(true));
+        liftables.forEach(liftable => liftable.update());
         this.drawLiftables(liftables);
         this.drawPlayAgainButton();
     }
 
-    private drawLiftables(liftables: Liftable[]): void {
+    private hoverStates: Map<Liftable, boolean> = new Map();
+
+    // TODO: i think ideally this should only be called once...
+    setLiftablePositions(liftables: Liftable[]): void {
         const sortedLiftables = [...liftables]
-            .sort((a, b) => b.weight - a.weight)
+            .sort((a, b) => b.weight - a.weight);
 
         const centerX = this.p.width / 2;
         const itemsPerRow = 2;
         const padding = 50;
-
-        this.p.push();
-        this.p.imageMode(this.p.CENTER);
 
         let y = this.p.height - 200;
 
@@ -61,32 +63,44 @@ export class Rivington {
 
             const x = centerX + (col === 0 ? -imgWidth / 2 - padding * 1.5 : imgWidth / 2 + padding * 1.5);
 
-            // when is i:2, i:4, i:6, i:8
+            // when is i:2, i:4, i:6, i:8, increment y
             if (i > 0 && col === 0) {
-                // max height of previous 2 liftables.
                 let prevRowHeight = Math.max(sortedLiftables[i - 1].img.height, sortedLiftables[i - 2].img.height) / 2;
                 let thisRowHeight = liftable.img.height
                 if (sortedLiftables[i + 1]) {
                     thisRowHeight = Math.max(liftable.img.height, sortedLiftables[i + 1]?.img.height ?? 0) / 2;
                 }
-
                 y -= prevRowHeight / 10 + thisRowHeight / 10 + 120;
             }
 
-            const isHovered = this.p.mouseX > x - imgWidth &&
+            liftable.set_x_unsafe(col === 0 ? x + imgWidth / 2 : x - imgWidth / 2);
+            liftable.set_y_unsafe(y);
+
+            this.hoverStates.set(liftable,
+                this.p.mouseX > x - imgWidth &&
                 this.p.mouseX < x + imgWidth &&
                 this.p.mouseY > y - imgHeight / 2 &&
-                this.p.mouseY < y + imgHeight / 2;
+                this.p.mouseY < y + imgHeight / 2
+            );
+        }
+    }
+
+    private drawLiftables(liftables: Liftable[]): void {
+        const sortedLiftables = [...liftables]
+            .sort((a, b) => b.weight - a.weight)
+
+        const centerX = this.p.width / 2;
+
+        this.p.push();
+        this.p.imageMode(this.p.CENTER);
+
+        for (const liftable of sortedLiftables) {
+
+            const isHovered = this.hoverStates.get(liftable);
 
             const scale = isHovered ? 1.2 : 1;
 
-            this.p.image(
-                liftable.img,
-                col === 0 ? x + imgWidth / 2 : x - imgWidth / 2,
-                y,
-                liftable.img.width * scale,
-                liftable.img.height * scale
-            );
+            liftable.draw(scale);
 
             if (isHovered) {
                 this.p.textAlign(this.p.CENTER, this.p.CENTER);
@@ -106,20 +120,17 @@ export class Rivington {
         const x = this.p.width - buttonWidth - 50;
         const y = this.p.height - buttonHeight - 50;
 
-        // Check if mouse is hovering over button
         const isHovered = this.p.mouseX > x &&
             this.p.mouseX < x + buttonWidth &&
             this.p.mouseY > y &&
             this.p.mouseY < y + buttonHeight;
 
-        // Draw button
         this.p.push();
         this.p.fill(isHovered ? 'black' : 'white');
         this.p.stroke('black');
         this.p.strokeWeight(2);
         this.p.rect(x, y, buttonWidth, buttonHeight);
 
-        // Draw text
         this.p.noStroke();
         this.p.fill(isHovered ? 'white' : 'black');
         this.p.textAlign(this.p.CENTER, this.p.CENTER);
@@ -129,7 +140,6 @@ export class Rivington {
 
         this.p.image(Sprite.images.sleeping, 50, y - 20);
 
-        // Handle click
         if (isHovered && this.p.mouseIsPressed) {
             window.location.reload();
         }

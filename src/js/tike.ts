@@ -54,6 +54,10 @@ export class Tike implements Liftable, InteractionArea {
         return this.liftableImpl.isNearby(spriteX, spriteY, threshold);
     }
 
+    setJumpingEnabled(enabled: boolean): void {
+        this.liftableImpl.setJumpingEnabled(enabled);
+    }
+
     getCollisionBounds() {
         const imageWidth = MoveSkit.carImg?.width || 0;
         const imageHeight = MoveSkit.carImg?.height || 0;
@@ -87,13 +91,15 @@ export class Tike implements Liftable, InteractionArea {
         return this._isTransitioning && this.x >= this.startX + this.TRANSITION_DISTANCE;
     }
 
-    draw(ignited: boolean): void {
+    ignited = false;
+
+    draw(): void {
         this.p.push();
         this.p.noSmooth();
         this.p.imageMode(this.p.CENTER);
 
         let yOffset = 0;
-        if (ignited) {
+        if (this.ignited) {
             this.jitterI++;
             if (this.jitterI >= this.carJitters.length) this.jitterI = 0;
             yOffset = this._isTransitioning

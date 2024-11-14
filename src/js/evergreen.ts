@@ -64,8 +64,10 @@ export class Evergreen {
             if (!obj.isLifted && !obj.vx && !obj.vy) obj.draw();
         });
 
+        this.tike.ignited = this.cargobay.whatIsWeight() > 25 && this.cargobay.whatIsWeight() < 99;
+
         if (!this.tike.isLifted) {
-            this.tike.draw(this.cargobay.whatIsWeight() > 25 && this.cargobay.whatIsWeight() < 99);
+            this.tike.draw();
         }
 
         this.sprite.draw();
@@ -75,7 +77,7 @@ export class Evergreen {
         });
 
         if (this.tike.isLifted) {
-            this.tike.draw(true);
+            this.tike.draw();
         }
     }
 

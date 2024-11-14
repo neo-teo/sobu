@@ -89,6 +89,10 @@ export class Box extends Obstacle implements Liftable, InteractionArea {
         return this.liftableImpl.isNearby(spriteX, spriteY, threshold);
     }
 
+    setJumpingEnabled(enabled: boolean): void {
+        this.liftableImpl.setJumpingEnabled(enabled);
+    }
+
     static loadImages(p: p5): void {
         this.images = [
             p.loadImage('/boxes/small.png'),
@@ -97,7 +101,15 @@ export class Box extends Obstacle implements Liftable, InteractionArea {
         ];
     }
 
-    draw(): void {
-        this.p.image(this.img, this.x, this.y);
+    draw(scale?: number): void {
+        this.p.image(this.img, this.x, this.y, this.img.width * (scale ?? 1), this.img.height * (scale ?? 1));
+    }
+
+    set_x_unsafe(x: number): void {
+        this.liftableImpl.set_x_unsafe(x);
+    }
+
+    set_y_unsafe(y: number): void {
+        this.liftableImpl.set_y_unsafe(y);
     }
 }

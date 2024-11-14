@@ -15,6 +15,8 @@ export interface Liftable {
     readonly weight: number;
     readonly vx: number;
     readonly vy: number;
+    set_x_unsafe(x: number): void;
+    set_y_unsafe(y: number): void;
     readonly img: p5.Image;
     readonly name: string;
     readonly description: string;
@@ -26,10 +28,12 @@ export interface Liftable {
     update(): void;  // called each frame to update physics
     getCollisionBoundsCenter(): { x: number, y: number };  // New method
     setObstacles(obstacles: InteractionArea[]): void;
+    setJumpingEnabled(enabled: boolean): void;
+    draw(scale?: number): void;
 }
 
 // Mixin class to provide default Liftable implementations
-export class LiftableMixin implements Omit<Liftable, 'img' | 'name' | 'description'> {
+export class LiftableMixin implements Omit<Liftable, 'img' | 'draw' | 'name' | 'description'> {
     weight: number = 50.0;  // Default weight as float
     isLifted: boolean = false;
 
@@ -49,6 +53,13 @@ export class LiftableMixin implements Omit<Liftable, 'img' | 'name' | 'descripti
 
     private interactionArea: InteractionArea;
     private obstacles: InteractionArea[] = []; // Add this property
+
+    private readonly JUMP_CHANCE = 0.004; // 0.5% chance to jump each frame
+    private readonly JUMP_HEIGHT = 2;
+    private isJumping: boolean = false;
+    private jumpStartY: number = 0;
+    private jumpProgress: number = 0;
+    private jumpingEnabled: boolean = false;
 
     constructor(p: p5, x: number, y: number, interactionArea: InteractionArea) {
         this.p = p;
@@ -133,6 +144,29 @@ export class LiftableMixin implements Omit<Liftable, 'img' | 'name' | 'descripti
                 this.isMoving = false;
             }
         }
+
+        // Only jump if explicitly enabled
+        if (this.jumpingEnabled && !this.isLifted && !this.isMoving) {
+            if (!this.isJumping && Math.random() < this.JUMP_CHANCE) {
+                // Start a new jump
+                this.isJumping = true;
+                this.jumpStartY = this._y;
+                this.jumpProgress = 0;
+            }
+
+            if (this.isJumping) {
+                this.jumpProgress += 0.1; // Controls jump speed
+                // Smooth sine wave motion
+                const jumpOffset = Math.sin(this.jumpProgress * Math.PI) * this.JUMP_HEIGHT;
+                this._y = this.jumpStartY - jumpOffset;
+
+                // End jump when complete
+                if (this.jumpProgress >= 1) {
+                    this.isJumping = false;
+                    this._y = this.jumpStartY;
+                }
+            }
+        }
     }
 
     drop(direction: 'left' | 'right' | 'up' | 'down'): void {
@@ -162,6 +196,9 @@ export class LiftableMixin implements Omit<Liftable, 'img' | 'name' | 'descripti
     get vx(): number { return this._vx; }
     get vy(): number { return this._vy; }
 
+    set_x_unsafe(x: number) { this._x = x; }
+    set_y_unsafe(y: number) { this._y = y; }
+
     lift(): void {
         this.isLifted = true;
         this.isMoving = false;
@@ -186,5 +223,9 @@ export class LiftableMixin implements Omit<Liftable, 'img' | 'name' | 'descripti
         const centerY = bounds.y + bounds.height / 2;
         const distance = this.p.dist(spriteX, spriteY, centerX, centerY);
         return distance <= threshold;
+    }
+
+    setJumpingEnabled(enabled: boolean): void {
+        this.jumpingEnabled = enabled;
     }
 }

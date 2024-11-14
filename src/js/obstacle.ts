@@ -40,6 +40,4 @@ export abstract class Obstacle implements InteractionArea {
             y + spriteHeight > bounds.y
         );
     }
-
-    abstract draw(): void;
 }

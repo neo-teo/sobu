@@ -117,7 +117,7 @@ export class Dialog {
             this.p.text(currentLine, dialogX + padding, y + paddingY);
         }
 
-        if (this.isWaitingForNext && this.currentScriptIndex < this.script.length - 1) {
+        if (this.isWaitingForNext) {
             this.p.textSize(10);
             this.p.text("→ space", dialogX + boxWidth - padding * 5, dialogY + boxHeight - paddingY);
         }

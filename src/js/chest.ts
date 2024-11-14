@@ -50,6 +50,10 @@ export class Chest extends Obstacle implements Liftable, InteractionArea {
         return this.liftableImpl.isNearby(spriteX, spriteY, threshold);
     }
 
+    setJumpingEnabled(enabled: boolean): void {
+        this.liftableImpl.setJumpingEnabled(enabled);
+    }
+
     setObstacles(obstacles: InteractionArea[]): void {
         this.liftableImpl.setObstacles(obstacles);
     }
@@ -71,7 +75,15 @@ export class Chest extends Obstacle implements Liftable, InteractionArea {
         this.image = p.loadImage('/chest.png');
     }
 
-    draw(): void {
-        this.p.image(Chest.image, this.x, this.y);
+    draw(scale?: number): void {
+        this.p.image(this.img, this.x, this.y, this.img.width * (scale ?? 1), this.img.height * (scale ?? 1));
+    }
+
+    set_x_unsafe(x: number): void {
+        this.liftableImpl.set_x_unsafe(x);
+    }
+
+    set_y_unsafe(y: number): void {
+        this.liftableImpl.set_y_unsafe(y);
     }
 } 

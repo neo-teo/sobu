@@ -21,19 +21,19 @@ export class Box extends Obstacle implements Liftable, InteractionArea {
         switch (size) {
             case 'sm':
                 this.name = 'Small box';
-                this.description = 'Good for moving little things';
+                this.description = '?????';
                 this.img = Box.images[0];
                 this.weight = 5.0;
                 break;
             case 'md':
                 this.name = 'Medium box';
-                this.description = 'Good for moving medium things';
+                this.description = '?????';
                 this.img = Box.images[1];
                 this.weight = 20.8;
                 break;
             case 'lg':
                 this.name = 'Large box';
-                this.description = 'Good for moving large things';
+                this.description = '?????';
                 this.img = Box.images[2];
                 this.weight = 8.5;
                 break;

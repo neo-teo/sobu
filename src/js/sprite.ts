@@ -50,6 +50,7 @@ export default class Sprite {
         this.images.standingRight = p.loadImage('/sprite/right_rest.gif');
         this.images.standingUp = p.loadImage('/sprite/up_rest.gif');
         this.images.standingDown = p.loadImage('/sprite/down_rest.gif');
+        this.images.sleeping = p.loadImage('/sprite/sleep.gif');
 
         this.imagesLoaded = true;
     }

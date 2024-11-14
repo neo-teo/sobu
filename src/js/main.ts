@@ -50,7 +50,7 @@ const sketch = (p: p5) => {
             return;
         }
 
-        p.background(255);
+        p.background('#FFF5E9');
 
         // evergreen.weMovedOut()
         if (evergreen.weMovedOut()) {

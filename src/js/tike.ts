@@ -121,4 +121,12 @@ export class Tike implements Liftable, InteractionArea {
     get isTransitioning(): boolean {
         return this._isTransitioning;
     }
+
+    set_x_unsafe(x: number): void {
+        this.liftableImpl.set_x_unsafe(x);
+    }
+
+    set_y_unsafe(y: number): void {
+        this.liftableImpl.set_y_unsafe(y);
+    }
 }

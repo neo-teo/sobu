@@ -3,7 +3,7 @@ import 'p5/lib/addons/p5.sound';
 
 declare global {
     interface Window {
-        p5: {
+        myp5: {
             prototype: {
                 loadSound: (path: string, success?: () => void, error?: (err: any) => void) => any;
             };

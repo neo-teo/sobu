@@ -7,7 +7,6 @@ import { Chest } from "./chest";
 import Sprite from "./sprite";
 import { Tike } from "./tike";
 import { Liftable } from "./liftable";
-import { SoundManager } from "./soundmanager";
 
 export class Evergreen {
     walls: Wall[];
@@ -82,10 +81,6 @@ export class Evergreen {
     }
 
     update(): void {
-        // if (!this.weMovedOut()) {
-        //     SoundManager.playEvergreen();
-        // }
-
         this.boxes.forEach((box) => box.update());
         this.chest.update();
         this.plants.forEach((plant) => plant.update());
